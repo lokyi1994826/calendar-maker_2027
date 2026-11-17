@@ -19,9 +19,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600&family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
 
-  <!-- html-to-image (用於 300 DPI 100% 無損精準尺寸 PNG / JPG 像素級匯出) -->
-  <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
 
+<!-- html-to-image + html2canvas 雙重無損 300 DPI 導出引擎 -->
+  <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
   <style>
     :root {
       --primary: #9C2D4F;
@@ -3407,7 +3408,7 @@
       document.getElementById('exportModal').classList.remove('open');
     }
 
-    async function exportHighResImage(format = 'png') {
+async function exportHighResImage(format = 'png') {
       const btnId = format === 'png' ? 'btnExportPNG' : 'btnExportJPG';
       const btn = document.getElementById(btnId);
       const originalText = btn.innerText;
@@ -3419,33 +3420,83 @@
       const prevTransform = scaleWrapper.style.transform;
 
       try {
+        // 1. 進入乾淨輸出模式：移除預覽縮放、隱藏所有編輯控制點與格線
         paper.classList.add('export-clean-mode');
         scaleWrapper.style.transform = 'none';
 
+        // 等待字型同 DOM 狀態穩定
+        if (document.fonts && document.fonts.ready) {
+          await document.fonts.ready;
+        }
+        await new Promise(r => setTimeout(r, 120));
+
+        // 計算 300 DPI 對應嘅精準 Pixel Ratio (300 / 96 = 3.125)
         const sizeScaleCompensation = appState.sizeCode === 'A3' ? (1 / 0.72) : (appState.sizeCode === 'A4' ? (1 / 0.85) : 1);
         const exact300DpiRatio = 3.125 * sizeScaleCompensation;
 
-        const exportOptions = {
-          pixelRatio: exact300DpiRatio,
-          quality: 1.0,
-          backgroundColor: appState.colors.paperBg,
-          cacheBust: true,
-          style: {
-            transform: 'none',
-            boxShadow: 'none'
+        // 過濾器：跳過所有無 src 嘅隱藏空 <img> (防止空背景圖或空相框觸發 onerror)
+        const domFilter = (node) => {
+          if (node.tagName === 'IMG') {
+            const srcAttr = node.getAttribute('src');
+            if (!srcAttr || srcAttr.trim() === '' || node.style.display === 'none') {
+              return false;
+            }
           }
+          return true;
         };
 
-        let dataUrl;
-        if (format === 'png') {
-          dataUrl = await htmlToImage.toPng(paper, exportOptions);
-        } else {
-          dataUrl = await htmlToImage.toJpeg(paper, exportOptions);
+        let dataUrl = null;
+
+        // 引擎 A：優先嘗試 html-to-image (關閉 cacheBust 保護 Base64，關閉 fontEmbed 防止 Google Fonts CORS 報錯)
+        try {
+          const exportOptions = {
+            pixelRatio: exact300DpiRatio,
+            quality: 1.0,
+            backgroundColor: appState.colors.paperBg,
+            cacheBust: false,
+            skipAutoScale: true,
+            fontEmbedCSS: '', // 關鍵修復：避免抓取外部 Google Fonts CSS 觸發跨域崩潰
+            filter: domFilter,
+            style: {
+              transform: 'none',
+              boxShadow: 'none'
+            }
+          };
+
+          if (format === 'png') {
+            dataUrl = await htmlToImage.toPng(paper, exportOptions);
+          } else {
+            dataUrl = await htmlToImage.toJpeg(paper, exportOptions);
+          }
+        } catch (primaryErr) {
+          console.warn('切換至 html2canvas 300DPI 後備渲染引擎:', primaryErr);
+        }
+
+        // 引擎 B：若 iOS Safari 或瀏覽器攔截 SVG ForeignObject，自動無縫切換 html2canvas 渲染 300 DPI
+        if (!dataUrl || dataUrl === 'data:,') {
+          const canvas = await html2canvas(paper, {
+            scale: exact300DpiRatio,
+            useCORS: true,
+            allowTaint: true,
+            backgroundColor: appState.colors.paperBg,
+            logging: false,
+            ignoreElements: (el) => {
+              if (el.tagName === 'IMG') {
+                const srcAttr = el.getAttribute('src');
+                if (!srcAttr || srcAttr.trim() === '' || el.style.display === 'none') return true;
+              }
+              return false;
+            }
+          });
+          dataUrl = format === 'png'
+            ? canvas.toDataURL('image/png')
+            : canvas.toDataURL('image/jpeg', 1.0);
         }
 
         const ext = format === 'png' ? 'png' : 'jpg';
         const fileName = `2027_Pet_Calendar_${appState.sizeCode}_${appState.orientation}_Month${appState.currentMonth}_300DPI.${ext}`;
 
+        // 觸發自動下載
         const link = document.createElement('a');
         link.download = fileName;
         link.href = dataUrl;
@@ -3453,6 +3504,7 @@
         link.click();
         document.body.removeChild(link);
 
+        // 同步顯示喺下方預覽區，方便手機長按儲存原圖
         const previewArea = document.getElementById('mobileImagePreviewArea');
         const previewImg = document.getElementById('generatedHighResPreview');
         const outW = Math.round(appState.paperWidthPx * exact300DpiRatio);
@@ -3461,9 +3513,10 @@
           `✅ 300 DPI 無損 ${ext.toUpperCase()} 已生成！（精準尺寸：${outW} × ${outH} px）`;
         previewImg.src = dataUrl;
         previewArea.style.display = 'flex';
+
       } catch (err) {
-        console.error('匯出圖片失敗:', err);
-        alert('匯出圖片時遇到問題，請確認相片已正確載入後再試一次！');
+        console.error('匯出圖片詳細錯誤:', err);
+        alert('匯出圖片時遇到問題：' + (err.message || '請重新整理頁面後再試一次'));
       } finally {
         scaleWrapper.style.transform = prevTransform;
         paper.classList.remove('export-clean-mode');
@@ -3471,7 +3524,6 @@
         btn.disabled = false;
       }
     }
-
     function exportVectorPDF() {
       closeExportModal();
       setTimeout(() => {
