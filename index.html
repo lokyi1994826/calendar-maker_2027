@@ -1,0 +1,3511 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>2027 寵物月曆自由設計工作室 Pro | HK • TW • CN 300DPI 無損印刷級</title>
+
+  <!-- ==================== 社交媒體分享預覽卡 (Open Graph / Threads / IG / WhatsApp) ==================== -->
+  <meta name="description" content="免費線上製作 2027 專屬寵物月曆！內置中港台三地公眾假期、農曆及廿四節氣，支援 A5/B5/A4 自由拖拉排版、自訂背景與貼紙庫、300 DPI 無損 PNG / JPG / PDF 導出。100% 純本機運算，保障私隱安全。">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="🐾 2027 寵物月曆自由設計工作室 Pro (HK/TW/CN)">
+  <meta property="og:description" content="高自由度文青日系月曆設計工具 ✨ 支援中港台紅日切換、自由拖拉排版、跨月貼紙素材庫、300 DPI 無損 PNG/JPG/PDF 導出及本機專案備份。">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="🐾 2027 寵物月曆自由設計工作室 Pro">
+  <meta name="twitter:description" content="免費製作 2027 專屬寵物月曆！支援中港台紅日、自由拖拉排版、300 DPI 無損 PNG / JPG / PDF 印刷級匯出。">
+
+  <!-- Google Fonts 開源免費商用字型 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600&family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <!-- html-to-image (用於 300 DPI 100% 無損精準尺寸 PNG / JPG 像素級匯出) -->
+  <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
+
+  <style>
+    :root {
+      --primary: #9C2D4F;
+      --primary-light: #C85A7C;
+      --primary-soft: rgba(156, 45, 79, 0.12);
+      --accent-blue: #7FA6C9;
+      --glass-bg: rgba(255, 255, 255, 0.68);
+      --glass-border: rgba(255, 255, 255, 0.78);
+      --glass-shadow: 0 12px 40px rgba(65, 35, 50, 0.10), inset 0 1px 1px rgba(255, 255, 255, 0.9);
+      --text-dark: #2C2528;
+      --text-muted: #766B70;
+
+      /* 月曆畫布變數 */
+      --paper-bg: #FAF8F5;
+      --cal-text: #33302E;
+      --cal-holiday: #C46D5E;
+      --cal-sub: #8C8581;
+      --cal-grid-color: #DCD6CF;
+      --font-en: 'Cormorant Garamond', serif;
+      --font-zh: 'Noto Serif TC', serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text-dark);
+      min-height: 100vh;
+      background: linear-gradient(135deg, #F6ECEF 0%, #E8EEF5 50%, #F3E9EC 100%);
+      background-attachment: fixed;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* 背景流體光暈 */
+    .ambient-blobs {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(75px);
+      opacity: 0.45;
+      animation: floatBlob 18s infinite alternate ease-in-out;
+    }
+    .blob-1 { width: 420px; height: 420px; background: #E5B8C8; top: -100px; left: -80px; }
+    .blob-2 { width: 380px; height: 380px; background: #B8CEE8; bottom: -80px; right: -60px; animation-delay: -6s; }
+    .blob-3 { width: 300px; height: 300px; background: #F2D7C4; top: 40%; left: 45%; animation-delay: -12s; }
+
+    @keyframes floatBlob {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(35px, -30px) scale(1.08); }
+    }
+
+    /* Liquid Glass 通用樣式 */
+    .liquid-glass {
+      background: var(--glass-bg);
+      backdrop-filter: blur(22px) saturate(180%);
+      -webkit-backdrop-filter: blur(22px) saturate(180%);
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--glass-shadow);
+    }
+
+    /* ==================== 頂部導航欄 ==================== */
+    header.top-bar {
+      position: sticky;
+      top: 10px;
+      z-index: 100;
+      margin: 10px 16px 0;
+      padding: 10px 18px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .brand-area {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .brand-logo {
+      width: 36px;
+      height: 36px;
+      border-radius: 11px;
+      background: linear-gradient(135deg, var(--primary), #C96A88);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 18px;
+      box-shadow: 0 4px 12px rgba(156, 45, 79, 0.28);
+    }
+    .brand-title h1 {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .save-status-pill {
+      font-size: 11px;
+      font-weight: 500;
+      padding: 2px 9px;
+      border-radius: 99px;
+      background: rgba(46, 139, 87, 0.12);
+      color: #266D45;
+      border: 1px solid rgba(46, 139, 87, 0.25);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .brand-title p {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    /* 地區切換膠囊 */
+    .region-pills {
+      display: flex;
+      background: rgba(255,255,255,0.55);
+      padding: 3px;
+      border-radius: 12px;
+      border: 1px solid rgba(156,45,79,0.12);
+    }
+    .region-pill {
+      border: none;
+      background: transparent;
+      padding: 5px 10px;
+      border-radius: 9px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .region-pill.active {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(156, 45, 79, 0.25);
+    }
+
+    .btn {
+      border: 1px solid rgba(156, 45, 79, 0.18);
+      background: rgba(255, 255, 255, 0.78);
+      color: var(--text-dark);
+      padding: 7px 13px;
+      border-radius: 11px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+    .btn:hover {
+      background: #fff;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    }
+    .btn.active-toggle {
+      background: var(--primary-soft);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), #B84268);
+      color: #fff;
+      border: none;
+      box-shadow: 0 4px 14px rgba(156, 45, 79, 0.3);
+    }
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #872342, #A8385C);
+      color: #fff;
+    }
+
+    /* ==================== 溫馨提示橫幅 ==================== */
+    .safety-banner {
+      position: relative;
+      z-index: 10;
+      margin: 8px 16px 0;
+      padding: 8px 16px;
+      border-radius: 14px;
+      background: rgba(255, 248, 235, 0.78);
+      border: 1px solid rgba(217, 155, 67, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 12px;
+      color: #6E4E1E;
+    }
+    .safety-banner-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+      min-width: 260px;
+    }
+    .safety-banner-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* ==================== 主工作區 (PC 雙欄 / 手機垂直) ==================== */
+    main.workspace {
+      position: relative;
+      z-index: 10;
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: 16px;
+      padding: 12px 16px 20px;
+      max-width: 1720px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    /* ==================== 左側：畫布預覽與快速工具列 ==================== */
+    .stage-column {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    /* 月份切換列 */
+    .month-bar {
+      padding: 8px 12px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .month-bar::-webkit-scrollbar { display: none; }
+    .month-chip {
+      border: 1px solid transparent;
+      background: rgba(255,255,255,0.5);
+      color: var(--text-dark);
+      padding: 6px 12px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.18s;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .month-chip.has-photo::after {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #38A169;
+    }
+    .month-chip.active {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 3px 10px rgba(156, 45, 79, 0.25);
+    }
+
+    /* 畫布上方快速新增與縮放列 */
+    .canvas-toolbar {
+      padding: 8px 14px;
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .quick-add-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .sticker-quick-btn {
+      border: 1px solid rgba(0,0,0,0.08);
+      background: rgba(255,255,255,0.8);
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      font-size: 15px;
+      cursor: pointer;
+      transition: transform 0.15s;
+    }
+    .sticker-quick-btn:hover { transform: scale(1.15); }
+
+    /* 畫布外框視窗 */
+    .canvas-viewport {
+      flex: 1;
+      min-height: 520px;
+      border-radius: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      overflow: auto;
+      position: relative;
+      user-select: none;
+    }
+
+    /* 縮放包裹層 (只用於螢幕預覽縮放，匯出時會強制 1:1 300DPI) */
+    .canvas-scale-wrapper {
+      transform-origin: center center;
+      transition: transform 0.15s ease-out;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ==================== 實體月曆紙張畫布 ==================== */
+    #calendarPaper {
+      position: relative;
+      background-color: var(--paper-bg);
+      box-shadow: 0 20px 60px rgba(45, 25, 35, 0.18), 0 2px 8px rgba(0,0,0,0.06);
+      overflow: hidden;
+      transition: background-color 0.25s;
+    }
+
+    /* 自訂背景圖片層 (位於底紙之上、所有元素之下) */
+    .paper-bg-image-layer {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .paper-bg-image-layer img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform-origin: center center;
+      display: none;
+    }
+
+    /* 紙張紋理疊加層 */
+    .paper-texture-overlay {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 40;
+      opacity: 0.25;
+      background-image: radial-gradient(rgba(120, 100, 80, 0.12) 1px, transparent 0);
+      background-size: 4px 4px;
+    }
+
+    /* 網格對齊視覺輔助層 (匯出時自動隱藏) */
+    .snap-grid-overlay {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 55;
+      display: none;
+      background-size: 20px 20px;
+      background-image:
+        linear-gradient(to right, rgba(156, 45, 79, 0.12) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(156, 45, 79, 0.12) 1px, transparent 1px);
+    }
+    .snap-grid-overlay.show {
+      display: block;
+    }
+
+    /* 頂部線圈打孔安全區提示 (匯出時自動隱藏) */
+    .wire-o-guide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 45px;
+      background: repeating-linear-gradient(
+        45deg,
+        rgba(156, 45, 79, 0.06),
+        rgba(156, 45, 79, 0.06) 8px,
+        rgba(255, 255, 255, 0.4) 8px,
+        rgba(255, 255, 255, 0.4) 16px
+      );
+      border-bottom: 1.5px dashed rgba(156, 45, 79, 0.45);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      color: var(--primary);
+      font-weight: 600;
+      z-index: 60;
+      pointer-events: none;
+    }
+    .wire-o-guide.show { display: flex; }
+
+    /* 中軸對齊輔助線 (拖拉時顯示，匯出時隱藏) */
+    .align-guide-v, .align-guide-h {
+      position: absolute;
+      background: rgba(156, 45, 79, 0.75);
+      pointer-events: none;
+      z-index: 70;
+      display: none;
+    }
+    .align-guide-v { width: 1.5px; top: 0; bottom: 0; left: 50%; }
+    .align-guide-h { height: 1.5px; left: 0; right: 0; top: 50%; }
+
+    /* ==================== 可自由拖拉與縮放嘅畫布元素 ==================== */
+    .canvas-item {
+      position: absolute;
+      cursor: move;
+      touch-action: none;
+      z-index: 10;
+    }
+    .canvas-item.selected {
+      outline: 2px solid var(--primary);
+      outline-offset: 2px;
+      z-index: 30;
+    }
+    .resize-handle {
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      right: -7px;
+      bottom: -7px;
+      border-radius: 50%;
+      background: var(--primary);
+      border: 2px solid #fff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+      cursor: nwse-resize;
+      display: none;
+      z-index: 35;
+    }
+    .canvas-item.selected .resize-handle {
+      display: block;
+    }
+
+    /* 匯出乾淨模式：徹底隱藏所有選取框、控制點、網格線與安全線 */
+    #calendarPaper.export-clean-mode .canvas-item.selected {
+      outline: none !important;
+    }
+    #calendarPaper.export-clean-mode .resize-handle,
+    #calendarPaper.export-clean-mode .wire-o-guide,
+    #calendarPaper.export-clean-mode .snap-grid-overlay,
+    #calendarPaper.export-clean-mode .align-guide-v,
+    #calendarPaper.export-clean-mode .align-guide-h {
+      display: none !important;
+    }
+    #calendarPaper.export-clean-mode .photo-placeholder-box {
+      border-color: transparent !important;
+      background: transparent !important;
+    }
+    #calendarPaper.export-clean-mode .photo-placeholder-box * {
+      display: none !important;
+    }
+
+    /* 1. 主相片框 + 方法 B 文青佔位框 */
+    .photo-frame-inner {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      position: relative;
+      background: rgba(239, 235, 228, 0.55);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .photo-placeholder-box {
+      width: 100%;
+      height: 100%;
+      border: 2px dashed rgba(156, 45, 79, 0.32);
+      border-radius: inherit;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: var(--primary);
+      background: rgba(255, 255, 255, 0.45);
+      cursor: pointer;
+      padding: 20px;
+      text-align: center;
+      transition: all 0.2s ease;
+    }
+    .photo-placeholder-box:hover {
+      background: rgba(156, 45, 79, 0.06);
+      border-color: var(--primary);
+    }
+    .photo-placeholder-box .paw-icon {
+      font-size: 38px;
+      line-height: 1;
+      filter: drop-shadow(0 4px 8px rgba(156, 45, 79, 0.15));
+    }
+    .photo-placeholder-box .upload-title {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    .photo-placeholder-box .upload-sub {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    .photo-frame-inner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: 50% 50%;
+      transform-origin: center center;
+      pointer-events: none;
+      user-select: none;
+      display: none;
+      will-change: transform, object-position;
+    }
+    /* 暖調油畫濾鏡 */
+    .filter-oil img {
+      filter: contrast(1.06) saturate(1.18) sepia(0.14) brightness(1.02);
+    }
+    .filter-oil::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle, transparent 55%, rgba(215, 180, 140, 0.16) 100%);
+      mix-blend-mode: multiply;
+      pointer-events: none;
+    }
+    .filter-film img {
+      filter: contrast(0.95) saturate(0.92) brightness(1.04) sepia(0.08);
+    }
+    .filter-bw img {
+      filter: grayscale(1) contrast(1.08);
+    }
+
+    /* 2. 年份與月份文字區塊 */
+    .year-text-box {
+      font-family: var(--font-en);
+      color: var(--cal-text);
+      font-weight: 600;
+      line-height: 1;
+      white-space: nowrap;
+    }
+    .month-text-box {
+      font-family: var(--font-en);
+      color: var(--cal-text);
+      font-weight: 600;
+      line-height: 1;
+      white-space: nowrap;
+      text-align: right;
+    }
+
+    /* 3. 日曆 7 欄網格區 */
+    .calendar-grid-wrapper {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    .weekdays-row {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      padding-bottom: 8px;
+      margin-bottom: 4px;
+    }
+    .weekday-cell {
+      text-align: center;
+      font-size: 11px;
+      font-family: var(--font-zh);
+      color: var(--cal-sub);
+      letter-spacing: 0.5px;
+    }
+    .weekday-cell.is-weekend {
+      color: var(--cal-holiday);
+    }
+    .days-matrix {
+      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      grid-auto-rows: 1fr;
+    }
+    .day-cell {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 3px 2px;
+      position: relative;
+      transition: background 0.15s;
+    }
+    /* 左上角記事對齊模式 */
+    .days-matrix.align-top-left .day-cell {
+      align-items: flex-start;
+      justify-content: flex-start;
+      padding: 5px 6px;
+    }
+    .day-num {
+      font-family: var(--font-en);
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--cal-text);
+      line-height: 1.1;
+    }
+    .day-sub {
+      font-family: var(--font-zh);
+      font-size: 9.5px;
+      color: var(--cal-sub);
+      margin-top: 2px;
+      line-height: 1.15;
+      text-align: center;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .day-cell.is-holiday .day-num,
+    .day-cell.is-holiday .day-sub {
+      color: var(--cal-holiday);
+      font-weight: 600;
+    }
+    .day-cell.is-pet-event {
+      background: rgba(156, 45, 79, 0.08);
+      border-radius: 6px;
+    }
+    .day-cell.is-pet-event .day-sub {
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    /* ==================== 右側：控制面板 ==================== */
+    aside.inspector-panel {
+      border-radius: 22px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      max-height: calc(100vh - 135px);
+    }
+
+    .panel-tabs {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      background: rgba(255,255,255,0.45);
+      border-bottom: 1px solid rgba(156,45,79,0.1);
+      padding: 5px;
+      gap: 4px;
+    }
+    .panel-tab {
+      border: none;
+      background: transparent;
+      padding: 8px 4px;
+      border-radius: 11px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      transition: all 0.2s;
+    }
+    .panel-tab span.icon { font-size: 15px; }
+    .panel-tab.active {
+      background: #fff;
+      color: var(--primary);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    .panel-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .tab-pane { display: none; flex-direction: column; gap: 13px; }
+    .tab-pane.active { display: flex; }
+
+    .control-card {
+      background: rgba(255, 255, 255, 0.62);
+      border: 1px solid rgba(255, 255, 255, 0.85);
+      border-radius: 15px;
+      padding: 13px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .control-card h3 {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .form-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 12px;
+    }
+    .form-row label {
+      color: var(--text-dark);
+      font-weight: 500;
+    }
+
+    select, input[type="text"], input[type="number"] {
+      width: 100%;
+      padding: 7px 10px;
+      border-radius: 9px;
+      border: 1px solid rgba(156, 45, 79, 0.2);
+      background: rgba(255,255,255,0.9);
+      font-size: 12px;
+      color: var(--text-dark);
+      outline: none;
+    }
+    input[type="range"] {
+      accent-color: var(--primary);
+      width: 135px;
+    }
+    input[type="color"] {
+      width: 34px;
+      height: 28px;
+      border: 1px solid rgba(0,0,0,0.15);
+      border-radius: 7px;
+      background: #fff;
+      cursor: pointer;
+      padding: 2px;
+    }
+
+    .preset-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 7px;
+    }
+    .preset-btn {
+      padding: 8px 10px;
+      border-radius: 10px;
+      border: 1px solid rgba(156, 45, 79, 0.16);
+      background: rgba(255,255,255,0.75);
+      font-size: 11.5px;
+      font-weight: 600;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.18s;
+    }
+    .preset-btn:hover, .preset-btn.active {
+      border-color: var(--primary);
+      background: var(--primary-soft);
+      color: var(--primary);
+    }
+    .preset-btn small {
+      display: block;
+      font-size: 10px;
+      color: var(--text-muted);
+      font-weight: 400;
+      margin-top: 2px;
+    }
+
+    /* 色票選擇器 */
+    .palette-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .palette-swatch {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid #fff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      transition: transform 0.15s;
+    }
+    .palette-swatch:hover { transform: scale(1.12); }
+
+    /* 圖層清單與跨月貼紙素材庫列表 */
+    .element-list-box {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-height: 175px;
+      overflow-y: auto;
+      padding-right: 2px;
+    }
+    .element-list-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 6px 9px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.82);
+      border: 1px solid rgba(156, 45, 79, 0.14);
+      font-size: 11.5px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .element-list-item:hover {
+      background: #fff;
+    }
+    .element-list-item.active {
+      border-color: var(--primary);
+      background: var(--primary-soft);
+    }
+    .elem-thumb {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      background: #F4EFEA;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      flex-shrink: 0;
+      font-size: 14px;
+    }
+    .elem-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    .elem-meta {
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-weight: 600;
+    }
+    .elem-actions {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .mini-icon-btn {
+      border: 1px solid rgba(0,0,0,0.1);
+      background: #fff;
+      padding: 3px 6px;
+      border-radius: 6px;
+      font-size: 11px;
+      cursor: pointer;
+    }
+    .mini-icon-btn:hover {
+      background: var(--primary-soft);
+      border-color: var(--primary);
+    }
+
+    /* 跨月貼紙素材庫 Grid */
+    .asset-library-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      max-height: 190px;
+      overflow-y: auto;
+    }
+    .asset-card {
+      background: rgba(255,255,255,0.85);
+      border: 1px solid rgba(156, 45, 79, 0.15);
+      border-radius: 10px;
+      padding: 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      position: relative;
+    }
+    .asset-card-preview {
+      width: 100%;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #F8F5F2;
+      border-radius: 7px;
+      overflow: hidden;
+    }
+    .asset-card-preview img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+    .asset-card-btns {
+      display: flex;
+      width: 100%;
+      gap: 4px;
+    }
+    .asset-card-btns button {
+      flex: 1;
+      font-size: 10.5px;
+      padding: 3px 4px;
+      border-radius: 6px;
+      border: 1px solid rgba(156, 45, 79, 0.2);
+      background: #fff;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .asset-card-btns button.use-btn {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+    }
+
+    /* ==================== 匯出 Modal 彈窗 ==================== */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(35, 20, 28, 0.45);
+      backdrop-filter: blur(8px);
+      z-index: 300;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .modal-backdrop.open { display: flex; }
+
+    .modal-card {
+      width: 100%;
+      max-width: 540px;
+      border-radius: 24px;
+      padding: 22px;
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid #fff;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.22);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .export-option-card {
+      border: 1px solid rgba(156, 45, 79, 0.18);
+      background: #fff;
+      border-radius: 15px;
+      padding: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .export-option-info h4 {
+      font-size: 13.5px;
+      color: var(--text-dark);
+      margin-bottom: 3px;
+    }
+    .export-option-info p {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* 手機長按儲存圖片預覽區 */
+    #mobileImagePreviewArea {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      background: #F8F4F6;
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px dashed var(--primary);
+      text-align: center;
+    }
+    #mobileImagePreviewArea img {
+      max-width: 100%;
+      max-height: 260px;
+      border-radius: 8px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+    }
+
+    /* ==================== 底部免責聲明與作者聯絡 Footer ==================== */
+    footer.site-footer {
+      position: relative;
+      z-index: 10;
+      margin: 12px 16px 20px;
+      padding: 18px 22px;
+      border-radius: 20px;
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .footer-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(156, 45, 79, 0.12);
+    }
+    .threads-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: linear-gradient(135deg, #1E1E1E, #3A2A32);
+      color: #fff;
+      text-decoration: none;
+      padding: 8px 15px;
+      border-radius: 99px;
+      font-weight: 600;
+      font-size: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .threads-badge:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(156, 45, 79, 0.3);
+    }
+    .disclaimer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 10px 18px;
+      line-height: 1.55;
+      font-size: 11.5px;
+    }
+    .disclaimer-item strong {
+      color: var(--text-dark);
+    }
+
+    /* ==================== 響應式手機版介面 ==================== */
+    @media (max-width: 1024px) {
+      main.workspace {
+        grid-template-columns: 1fr;
+      }
+      aside.inspector-panel {
+        max-height: none;
+      }
+      .canvas-viewport {
+        min-height: 390px;
+        padding: 12px;
+      }
+    }
+
+    /* ==================== 印刷級 PDF (@media print) ==================== */
+    @media print {
+      body {
+        background: #fff !important;
+      }
+      .ambient-blobs,
+      header.top-bar,
+      .safety-banner,
+      .month-bar,
+      .canvas-toolbar,
+      aside.inspector-panel,
+      footer.site-footer,
+      .modal-backdrop,
+      .wire-o-guide,
+      .snap-grid-overlay,
+      .resize-handle,
+      .align-guide-v,
+      .align-guide-h {
+        display: none !important;
+      }
+      main.workspace, .stage-column, .canvas-viewport {
+        padding: 0 !important;
+        margin: 0 !important;
+        display: block !important;
+      }
+      .canvas-scale-wrapper {
+        transform: none !important;
+      }
+      #calendarPaper {
+        box-shadow: none !important;
+        margin: 0 auto !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      .canvas-item.selected {
+        outline: none !important;
+      }
+      .photo-placeholder-box {
+        border: none !important;
+        background: transparent !important;
+      }
+      .photo-placeholder-box * {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 流體背景光暈 -->
+  <div class="ambient-blobs">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+
+  <!-- ==================== 頂部導航欄 ==================== -->
+  <header class="top-bar liquid-glass">
+    <div class="brand-area">
+      <div class="brand-logo">27</div>
+      <div class="brand-title">
+        <h1>
+          2027 寵物月曆自由設計工作室 Pro
+          <span class="save-status-pill" id="saveStatusBadge">✓ 本機自動暫存中</span>
+        </h1>
+        <p>預設 B5 橫向座檯曆 • 支援香港 / 台灣 / 大陸紅日 • 300 DPI 無損 PNG / JPG / PDF 導出</p>
+      </div>
+    </div>
+
+    <div class="top-actions">
+      <!-- 地區快速切換 -->
+      <div class="region-pills" title="切換 2027 公眾假期地區">
+        <button class="region-pill active" data-region="HK" onclick="switchRegion('HK')">🇭🇰 香港</button>
+        <button class="region-pill" data-region="TW" onclick="switchRegion('TW')">🇹🇼 台灣</button>
+        <button class="region-pill" data-region="CN" onclick="switchRegion('CN')">🇨🇳 大陸</button>
+      </div>
+
+      <!-- 專案 JSON 備份與還原 -->
+      <button class="btn" onclick="exportProjectJSON()" title="下載 .json 完整專案備份檔（包含相片、背景與貼紙庫）">
+        💾 備份專案 (.json)
+      </button>
+      <button class="btn" onclick="document.getElementById('importJsonInput').click()" title="讀取之前儲存嘅 .json 專案檔">
+        📂 讀取備份
+      </button>
+      <input type="file" id="importJsonInput" accept=".json" style="display:none" onchange="importProjectJSON(event)">
+
+      <!-- 300 DPI 無損匯出按鈕 -->
+      <button class="btn btn-primary" onclick="openExportModal()">
+        ✨ 導出無損 PNG / JPG / PDF
+      </button>
+    </div>
+  </header>
+
+  <!-- ==================== 溫馨提示橫幅 ==================== -->
+  <div class="safety-banner liquid-glass">
+    <div class="safety-banner-left">
+      <span style="font-size:16px;">💡</span>
+      <span>
+        <strong>溫馨提示：</strong>本工具採用 100% 純本機瀏覽器運算（無雲端伺服器），雖然系統已開啟 <strong>IndexedDB 自動暫存</strong>，但為避免清除瀏覽器快取或無痕模式導致心血結晶遺失，<strong>強烈建議完成或中途休息時撳右上角「💾 備份專案 (.json)」自行保存設計檔案！</strong>
+      </span>
+    </div>
+    <div class="safety-banner-actions">
+      <button class="btn" style="padding:4px 10px; font-size:11px;" onclick="resetCurrentMonthLayout()">↺ 重設本月版面</button>
+      <button class="btn" style="padding:4px 10px; font-size:11px; color:#B83333;" onclick="clearAllStorageData()">🗑️ 清空暫存</button>
+    </div>
+  </div>
+
+  <!-- ==================== 主工作區 ==================== -->
+  <main class="workspace">
+
+    <!-- 左側：畫布與月份切換 -->
+    <section class="stage-column">
+
+      <!-- 1-12 月份列 -->
+      <div class="month-bar liquid-glass" id="monthBar"></div>
+
+      <!-- 畫布上方快速工具列 -->
+      <div class="canvas-toolbar liquid-glass">
+        <div class="quick-add-group">
+          <button class="btn" onclick="document.getElementById('singlePhotoInput').click()">🖼️ 上載本月相片</button>
+          <input type="file" id="singlePhotoInput" accept="image/*" style="display:none" onchange="handleSinglePhotoUpload(event)">
+
+          <button class="btn" onclick="addCustomTextElement()">＋ 新增自由文字</button>
+          <button class="btn" onclick="document.getElementById('stickerImgInput').click()">＋ 插入貼紙/圖片</button>
+          <input type="file" id="stickerImgInput" accept="image/*" style="display:none" onchange="handleStickerImageUpload(event)">
+
+          <!-- 網格對齊開關掣 -->
+          <button class="btn" id="snapGridToolbarBtn" onclick="toggleSnapGrid()" title="開啟後拖拉元素會自動對齊格線">
+            📏 網格對齊: 關
+          </button>
+
+          <!-- 快速寵物貼紙 -->
+          <button class="sticker-quick-btn" onclick="addEmojiSticker('🐾')" title="加入肉球印">🐾</button>
+          <button class="sticker-quick-btn" onclick="addEmojiSticker('🦴')" title="加入骨頭">🦴</button>
+          <button class="sticker-quick-btn" onclick="addEmojiSticker('🎂')" title="加入生日蛋糕">🎂</button>
+          <button class="sticker-quick-btn" onclick="addEmojiSticker('👑')" title="加入皇冠">👑</button>
+          <button class="sticker-quick-btn" onclick="addEmojiSticker('🎀')" title="加入蝴蝶結">🎀</button>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:8px; font-size:12px;">
+          <span>預覽縮放:</span>
+          <input type="range" id="zoomRange" min="0.4" max="1.25" step="0.05" value="0.85" style="width:90px;" oninput="updateCanvasPreviewZoom(this.value)">
+          <span id="zoomLabel">85%</span>
+        </div>
+      </div>
+
+      <!-- 畫布中央預覽視窗 -->
+      <div class="canvas-viewport liquid-glass" id="canvasViewport" onmousedown="deselectAllIfClickedBg(event)">
+        <div class="canvas-scale-wrapper" id="canvasScaleWrapper">
+
+          <!-- 實體月曆畫布 (預設 B5 橫向 250x176mm -> 945x665px) -->
+          <div id="calendarPaper" style="width: 945px; height: 665px;">
+            <!-- 自訂背景圖片層 -->
+            <div class="paper-bg-image-layer" id="paperBgImageLayer">
+              <img id="paperBgImg" alt="Custom Background">
+            </div>
+
+            <!-- 紙張紋理層 -->
+            <div class="paper-texture-overlay" id="paperTextureOverlay"></div>
+
+            <!-- 網格對齊視覺格線層 -->
+            <div class="snap-grid-overlay" id="snapGridOverlay"></div>
+
+            <!-- 頂部雙線圈打孔安全區 -->
+            <div class="wire-o-guide" id="wireOGuide">⚠️ 頂部雙線圈打孔安全區 (12mm) — 請勿在此放置重要文字或寵物五官</div>
+
+            <!-- 中軸對齊輔助線 -->
+            <div class="align-guide-v" id="alignGuideV"></div>
+            <div class="align-guide-h" id="alignGuideH"></div>
+
+            <!-- 1. 可自由拖拉縮放：主相片框 (預設方法 B：點擊此處上載相片 🐾) -->
+            <div class="canvas-item" id="itemPhoto" data-item-type="core" style="left: 48px; top: 52px; width: 410px; height: 560px;">
+              <div class="photo-frame-inner filter-oil" id="photoFrameInner" style="border-radius: 4px;">
+                <div class="photo-placeholder-box" id="photoPlaceholderBox" onclick="document.getElementById('singlePhotoInput').click()">
+                  <div class="paw-icon">🐾</div>
+                  <div class="upload-title">點擊此處上載相片 🐾</div>
+                  <div class="upload-sub">支援 JPG / PNG / HEIC 無損原圖<br>上載後可喺右側「🐾 相片濾鏡」調整構圖焦點</div>
+                </div>
+                <img id="mainPetPhoto" alt="Pet Photo">
+              </div>
+              <div class="resize-handle" data-resize="itemPhoto"></div>
+            </div>
+
+            <!-- 2. 可自由拖拉縮放：年份標題 (2027) -->
+            <div class="canvas-item" id="itemYear" data-item-type="core" style="left: 495px; top: 56px; width: 130px; height: 44px;">
+              <div class="year-text-box" id="yearTextBox" contenteditable="true" spellcheck="false" style="font-size: 30px;">2027</div>
+              <div class="resize-handle" data-resize="itemYear"></div>
+            </div>
+
+            <!-- 3. 可自由拖拉縮放：月份標題 (January/ 1) -->
+            <div class="canvas-item" id="itemMonthTitle" data-item-type="core" style="left: 685px; top: 56px; width: 215px; height: 44px;">
+              <div class="month-text-box" id="monthTextBox" contenteditable="true" spellcheck="false" style="font-size: 30px;">January/ 1</div>
+              <div class="resize-handle" data-resize="itemMonthTitle"></div>
+            </div>
+
+            <!-- 4. 可自由拖拉縮放：7欄日期網格區 -->
+            <div class="canvas-item" id="itemCalendarGrid" data-item-type="core" style="left: 495px; top: 122px; width: 405px; height: 490px;">
+              <div class="calendar-grid-wrapper" id="calendarGridWrapper">
+                <div class="weekdays-row" id="weekdaysRow"></div>
+                <div class="days-matrix" id="daysMatrix"></div>
+              </div>
+              <div class="resize-handle" data-resize="itemCalendarGrid"></div>
+            </div>
+
+            <!-- 動態新增嘅自由文字與貼紙層 (跟隨當前月份獨立顯示) -->
+            <div id="customElementsLayer"></div>
+          </div>
+
+        </div>
+      </div>
+
+    </section>
+
+    <!-- 右側：多合一屬性控制面板 -->
+    <aside class="inspector-panel liquid-glass">
+      <div class="panel-tabs">
+        <button class="panel-tab active" onclick="switchInspectorTab('tabSize', this)">
+          <span class="icon">📐</span>尺寸背景
+        </button>
+        <button class="panel-tab" onclick="switchInspectorTab('tabPhoto', this)">
+          <span class="icon">🐾</span>相片濾鏡
+        </button>
+        <button class="panel-tab" onclick="switchInspectorTab('tabGrid', this)">
+          <span class="icon">📅</span>日期框線
+        </button>
+        <button class="panel-tab" onclick="switchInspectorTab('tabFont', this)">
+          <span class="icon">🔤</span>字型顏色
+        </button>
+        <button class="panel-tab" onclick="switchInspectorTab('tabElement', this)">
+          <span class="icon">✨</span>元素貼紙
+        </button>
+        <button class="panel-tab" onclick="switchInspectorTab('tabHoliday', this)">
+          <span class="icon">🎌</span>紅日紀念
+        </button>
+      </div>
+
+      <div class="panel-body">
+
+        <!-- 分頁 1：尺寸、網格對齊與背景圖片 -->
+        <div class="tab-pane active" id="tabSize">
+          <div class="control-card">
+            <h3>1. 選擇月曆尺寸 (座檯曆 / 掛牆曆)</h3>
+            <div class="preset-grid">
+              <button class="preset-btn active" onclick="applySizePreset('B5', 'landscape', this)">
+                B5 橫向座檯曆 (預設)
+                <small>250 × 176 mm (左圖右曆)</small>
+              </button>
+              <button class="preset-btn" onclick="applySizePreset('B5', 'portrait', this)">
+                B5 直向座檯/掛曆
+                <small>176 × 250 mm (上圖下曆)</small>
+              </button>
+              <button class="preset-btn" onclick="applySizePreset('A5', 'portrait', this)">
+                A5 直向文青散頁卡
+                <small>148 × 210 mm (原木底座款)</small>
+              </button>
+              <button class="preset-btn" onclick="applySizePreset('A5', 'landscape', this)">
+                A5 橫向三角座檯曆
+                <small>210 × 148 mm (經典座檯)</small>
+              </button>
+              <button class="preset-btn" onclick="applySizePreset('SQ', 'portrait', this)">
+                正方形木座卡
+                <small>150 × 150 mm (IG 極簡風)</small>
+              </button>
+              <button class="preset-btn" onclick="applySizePreset('A4', 'portrait', this)">
+                A4 大掛牆月曆
+                <small>210 × 297 mm (視覺大圖)</small>
+              </button>
+              <button class="preset-btn" onclick="applySizePreset('A3', 'portrait', this)">
+                A3 巨型海報掛曆
+                <small>297 × 420 mm (高解析度)</small>
+              </button>
+              <button class="preset-btn" onclick="applySizePreset('DESK_WIDE', 'landscape', this)">
+                長條形辦公座檯曆
+                <small>210 × 140 mm (雙線圈款)</small>
+              </button>
+            </div>
+          </div>
+
+          <div class="control-card">
+            <h3>2. 黃金排版與網格對齊 (Grid Snap)</h3>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <button class="btn" style="flex:1" onclick="applyQuickAutoLayout('sideBySide')">🖼️ 左圖右曆 (橫向)</button>
+              <button class="btn" style="flex:1" onclick="applyQuickAutoLayout('topBottom')">🖼️ 上圖下曆 (直向)</button>
+            </div>
+            <div class="form-row" style="margin-top:4px;">
+              <label>開啟磁吸網格對齊 (拖拉自動貼齊格線)</label>
+              <input type="checkbox" id="snapGridCheck" onchange="toggleSnapGrid(this.checked)">
+            </div>
+            <div class="form-row">
+              <label>網格間距大細 (px)</label>
+              <select id="snapGridSizeSelect" style="width:120px;" onchange="updateSnapGridSize(this.value)">
+                <option value="10">10 px (精細)</option>
+                <option value="20" selected>20 px (標準)</option>
+                <option value="40">40 px (寬距)</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label>顯示頂部雙線圈打孔安全區 (12mm)</label>
+              <input type="checkbox" id="wireOToggle" onchange="toggleWireOGuide(this.checked)">
+            </div>
+            <div class="form-row">
+              <label>顯示剛古美術紙微紋理質感</label>
+              <input type="checkbox" checked onchange="document.getElementById('paperTextureOverlay').style.display = this.checked ? 'block' : 'none'">
+            </div>
+          </div>
+
+          <!-- 新增：上載背景圖片功能 -->
+          <div class="control-card">
+            <h3>3. 上載月曆底紙背景圖片 (Background)</h3>
+            <div style="display:flex; gap:6px;">
+              <button class="btn btn-primary" style="flex:1; justify-content:center;" onclick="document.getElementById('bgImageInput').click()">
+                🌄 上載背景圖片
+              </button>
+              <button class="btn" style="color:#C53030;" onclick="removeCustomBgImage()" title="移除背景圖">
+                ✕ 移除
+              </button>
+            </div>
+            <input type="file" id="bgImageInput" accept="image/*" style="display:none" onchange="handleBgImageUpload(event)">
+
+            <div class="form-row">
+              <label>套用範圍</label>
+              <select id="bgScopeSelect" style="width:155px;" onchange="changeBgScope(this.value)">
+                <option value="global">套用至全部 12 個月</option>
+                <option value="month">只套用至當前月份</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label>背景不透明度 (Opacity)</label>
+              <input type="range" id="bgOpacityRange" min="0.05" max="1" step="0.05" value="0.35" oninput="updateBgTransform()">
+            </div>
+            <div class="form-row">
+              <label>背景大細 (Scale)</label>
+              <input type="range" id="bgScaleRange" min="0.5" max="3" step="0.05" value="1" oninput="updateBgTransform()">
+            </div>
+            <div class="form-row">
+              <label>背景旋轉 (°)</label>
+              <input type="range" id="bgRotateRange" min="-180" max="180" step="1" value="0" oninput="updateBgTransform()">
+            </div>
+            <div class="form-row">
+              <label>水平位移 (X)</label>
+              <input type="range" id="bgPanXRange" min="-300" max="300" step="5" value="0" oninput="updateBgTransform()">
+            </div>
+            <div class="form-row">
+              <label>垂直位移 (Y)</label>
+              <input type="range" id="bgPanYRange" min="-300" max="300" step="5" value="0" oninput="updateBgTransform()">
+            </div>
+          </div>
+        </div>
+
+        <!-- 分頁 2：相片與油畫濾鏡 -->
+        <div class="tab-pane" id="tabPhoto">
+          <div class="control-card">
+            <h3>1. 上傳寵物相片 (100% 本機不壓縮)</h3>
+            <div style="display:flex; gap:6px;">
+              <button class="btn btn-primary" style="flex:1; justify-content:center;" onclick="document.getElementById('singlePhotoInput').click()">
+                📸 上載本月相片
+              </button>
+              <button class="btn" style="color:#C53030;" onclick="clearCurrentMonthPhoto()" title="還原為虛線佔位框">
+                ✕ 移除相片
+              </button>
+            </div>
+            <button class="btn" style="width:100%; justify-content:center;" onclick="document.getElementById('batchPhotoInput').click()">
+              📚 一次過批量匯入 12 個月相片
+            </button>
+            <input type="file" id="batchPhotoInput" accept="image/*" multiple style="display:none" onchange="handleBatchPhotosUpload(event)">
+          </div>
+
+          <div class="control-card">
+            <h3>
+              <span>2. 相片框構圖與圓角 (無損取景)</span>
+              <button class="mini-icon-btn" onclick="resetCurrentPhotoCrop()">重設構圖</button>
+            </h3>
+            <p style="font-size:11px; color:var(--text-muted); line-height:1.4;">
+              💡 已升級無損焦點取景：上下左右拉動時會自動計算安全保護縮放，<strong>絕對唔會再裁斷張相或露出灰色底框！</strong>
+            </p>
+            <div class="form-row">
+              <label>相片放大 (Zoom)</label>
+              <input type="range" id="photoScaleSlider" min="1" max="2.8" step="0.02" value="1" oninput="updateCurrentPhotoTransform()">
+            </div>
+            <div class="form-row">
+              <label>左右取景焦點 (Focus X)</label>
+              <input type="range" id="photoFocusXSlider" min="0" max="100" step="1" value="50" oninput="updateCurrentPhotoTransform()">
+            </div>
+            <div class="form-row">
+              <label>上下取景焦點 (Focus Y)</label>
+              <input type="range" id="photoFocusYSlider" min="0" max="100" step="1" value="50" oninput="updateCurrentPhotoTransform()">
+            </div>
+            <div class="form-row">
+              <label>相片框圓角 (Radius)</label>
+              <input type="range" min="0" max="40" value="4" oninput="document.getElementById('photoFrameInner').style.borderRadius = this.value + 'px'; saveStateToIndexedDB();">
+            </div>
+          </div>
+
+          <div class="control-card">
+            <h3>3. 藝術插畫濾鏡風格</h3>
+            <div class="preset-grid">
+              <button class="preset-btn active" onclick="setPhotoFilter('filter-oil', this)">🎨 暖調油畫 (參考圖同款)</button>
+              <button class="preset-btn" onclick="setPhotoFilter('none', this)">✨ 高清原圖 (無濾鏡)</button>
+              <button class="preset-btn" onclick="setPhotoFilter('filter-film', this)">🎞️ 日系富士菲林</button>
+              <button class="preset-btn" onclick="setPhotoFilter('filter-bw', this)">🖤 經典黑白藝廊</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 分頁 3：日期框線與格式 -->
+        <div class="tab-pane" id="tabGrid">
+          <div class="control-card">
+            <h3>1. 日期格仔框線樣式</h3>
+            <div class="preset-grid">
+              <button class="preset-btn active" onclick="setGridBorderPreset('none', this)">
+                極簡無框線
+                <small>純粹靠 7 欄留白對齊</small>
+              </button>
+              <button class="preset-btn" onclick="setGridBorderPreset('full', this)">
+                傳統完整格仔框
+                <small>方便手寫行程記事</small>
+              </button>
+              <button class="preset-btn" onclick="setGridBorderPreset('horizontal', this)">
+                日系橫線分隔
+                <small>每週之間加幼細橫線</small>
+              </button>
+              <button class="preset-btn" onclick="setGridBorderPreset('rounded-cards', this)">
+                圓角獨立小方格
+                <small>每日獨立微圓角框</small>
+              </button>
+            </div>
+          </div>
+
+          <div class="control-card">
+            <h3>2. 框線粗幼、線型與對齊</h3>
+            <div class="form-row">
+              <label>線條樣式</label>
+              <select id="gridLineStyleSelect" style="width:130px;" onchange="updateGridBorderCustomization()">
+                <option value="solid">實線 (Solid)</option>
+                <option value="dashed">虛線 (Dashed)</option>
+                <option value="dotted">點線 (Dotted)</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label>框線粗幼 (px)</label>
+              <input type="range" id="gridBorderWidthRange" min="0" max="3" step="0.5" value="0" oninput="updateGridBorderCustomization()">
+            </div>
+            <div class="form-row">
+              <label>框線顏色</label>
+              <input type="color" id="gridBorderColorPicker" value="#DCD6CF" oninput="updateGridBorderCustomization()">
+            </div>
+            <div class="form-row">
+              <label>顯示整個日曆區外框</label>
+              <input type="checkbox" id="gridOuterBorderCheck" onchange="updateGridBorderCustomization()">
+            </div>
+            <div class="form-row">
+              <label>數字左上角對齊 (留白寫字模式)</label>
+              <input type="checkbox" id="gridTopLeftAlignCheck" onchange="toggleGridTopLeftAlign(this.checked)">
+            </div>
+            <div class="form-row">
+              <label>每週起始日</label>
+              <select id="weekStartSelect" style="width:140px;" onchange="changeWeekStartDay(this.value)">
+                <option value="SUN">星期日 (SUN 開頭)</option>
+                <option value="MON">星期一 (MON 開頭)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- 分頁 4：字型匯入與調色盤 -->
+        <div class="tab-pane" id="tabFont">
+          <div class="control-card">
+            <h3>1. 內置商用開源字型配搭</h3>
+            <div class="form-row">
+              <label>英文與數字字型</label>
+              <select id="enFontSelect" style="width:165px;" onchange="updateTypographySettings()">
+                <option value="'Cormorant Garamond', serif">Cormorant (參考圖優雅襯線)</option>
+                <option value="'Playfair Display', serif">Playfair Display (高級時尚)</option>
+                <option value="'Montserrat', sans-serif">Montserrat (現代極簡無襯線)</option>
+                <option value="'Zen Maru Gothic', sans-serif">Zen Maru (日系可愛圓體)</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label>中文與農曆字型</label>
+              <select id="zhFontSelect" style="width:165px;" onchange="updateTypographySettings()">
+                <option value="'Noto Serif TC', serif">思源宋體 (文青細明體)</option>
+                <option value="'Noto Sans TC', sans-serif">思源黑體 (清晰現代)</option>
+                <option value="'Zen Maru Gothic', sans-serif">日系圓體 (溫柔可愛)</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label>日期數字大細</label>
+              <input type="range" id="dayNumSizeRange" min="12" max="26" value="16" oninput="updateDayFontSize(this.value)">
+            </div>
+            <div class="form-row">
+              <label>農曆/假期細字大細</label>
+              <input type="range" id="daySubSizeRange" min="8" max="15" value="9.5" step="0.5" oninput="updateSubFontSize(this.value)">
+            </div>
+          </div>
+
+          <div class="control-card">
+            <h3>2. 匯入自訂字型檔 (.ttf / .otf / .woff2)</h3>
+            <p style="font-size:11px; color:var(--text-muted);">直接揀選你手機或電腦入面嘅字型檔，即可套用到成個月曆：</p>
+            <button class="btn" style="width:100%; justify-content:center;" onclick="document.getElementById('customFontInput').click()">
+              🔤 上傳本機字型檔 (.ttf / .otf)
+            </button>
+            <input type="file" id="customFontInput" accept=".ttf,.otf,.woff,.woff2" style="display:none" onchange="handleCustomFontUpload(event)">
+          </div>
+
+          <div class="control-card">
+            <h3>3. 莫蘭迪與紙張配色主題</h3>
+            <div class="palette-row">
+              <div class="palette-swatch" style="background:#FAF8F5;" title="日系暖米白 (預設)" onclick="applyColorTheme('#FAF8F5', '#33302E', '#C46D5E', '#8C8581')"></div>
+              <div class="palette-swatch" style="background:#FFFFFF;" title="純淨藝廊白" onclick="applyColorTheme('#FFFFFF', '#222222', '#B85252', '#7A7A7A')"></div>
+              <div class="palette-swatch" style="background:#F7ECEF;" title="莫蘭迪櫻花粉" onclick="applyColorTheme('#F7ECEF', '#3E2C33', '#9C2D4F', '#8A6F79')"></div>
+              <div class="palette-swatch" style="background:#EEF3F7;" title="霧霾冰川藍" onclick="applyColorTheme('#EEF3F7', '#2B3640', '#B55B52', '#6F8191')"></div>
+              <div class="palette-swatch" style="background:#F2EFE9;" title="燕麥亞麻色" onclick="applyColorTheme('#F2EFE9', '#3B352E', '#B56345', '#877D70')"></div>
+              <div class="palette-swatch" style="background:#262425;" title="極致黑金質感" onclick="applyColorTheme('#262425', '#EAE4DC', '#E08E79', '#9E968E')"></div>
+            </div>
+            <div class="form-row" style="margin-top:4px;">
+              <label>紙張底色</label>
+              <input type="color" id="paperBgPicker" value="#FAF8F5" oninput="updateSingleColorVar('--paper-bg', this.value)">
+            </div>
+            <div class="form-row">
+              <label>平日文字顏色</label>
+              <input type="color" id="calTextPicker" value="#33302E" oninput="updateSingleColorVar('--cal-text', this.value)">
+            </div>
+            <div class="form-row">
+              <label>紅日 / 假期顏色</label>
+              <input type="color" id="calHolidayPicker" value="#C46D5E" oninput="updateSingleColorVar('--cal-holiday', this.value)">
+            </div>
+          </div>
+        </div>
+
+        <!-- 分頁 5：自由元素、透明度、本月清單與跨月貼紙庫 -->
+        <div class="tab-pane" id="tabElement">
+          <div class="control-card">
+            <h3>1. 新增自由元素 (只加喺目前月份)</h3>
+            <div style="display:flex; gap:8px;">
+              <button class="btn btn-primary" style="flex:1; justify-content:center;" onclick="addCustomTextElement()">＋ 新增文字框</button>
+              <button class="btn" style="flex:1; justify-content:center;" onclick="document.getElementById('stickerImgInput').click()">＋ 上載貼紙/圖片</button>
+            </div>
+            <p style="font-size:11px; color:var(--text-muted);">
+              ⌨️ 支援鍵盤快捷鍵：選中畫布上嘅文字或貼紙後，直接撳鍵盤 <strong>Delete / Backspace</strong> 即可刪除！
+            </p>
+          </div>
+
+          <div class="control-card" id="selectedElementInspector">
+            <h3>2. 當前選中元素屬性 (含不透明度)</h3>
+            <p id="noElementSelectedHint" style="font-size:11.5px; color:var(--text-muted);">
+              👆 請直接喺左側畫布或下方清單點擊任何文字、貼紙或標題進行修改。
+            </p>
+            <div id="elementControlsBox" style="display:none; flex-direction:column; gap:9px;">
+              <div class="form-row" id="elemTextRow">
+                <label>文字內容</label>
+                <input type="text" id="selectedElemTextInput" oninput="updateSelectedElementStyle('text', this.value)">
+              </div>
+              <div class="form-row" id="elemSizeRow">
+                <label>字體大細 (px)</label>
+                <input type="range" id="selectedElemSizeInput" min="10" max="90" value="24" oninput="updateSelectedElementStyle('fontSize', this.value)">
+              </div>
+              <div class="form-row" id="elemColorRow">
+                <label>文字顏色</label>
+                <input type="color" id="selectedElemColorInput" value="#33302E" oninput="updateSelectedElementStyle('color', this.value)">
+              </div>
+              <div class="form-row">
+                <label>不透明度 (Opacity)</label>
+                <input type="range" id="selectedElemOpacityInput" min="0.05" max="1" step="0.05" value="1" oninput="updateSelectedElementStyle('opacity', this.value)">
+              </div>
+              <div class="form-row">
+                <label>旋轉角度 (°)</label>
+                <input type="range" id="selectedElemRotateInput" min="-180" max="180" value="0" oninput="updateSelectedElementStyle('rotate', this.value)">
+              </div>
+              <div style="display:flex; gap:6px;" id="customElemActionBtns">
+                <button class="btn" style="flex:1; justify-content:center;" onclick="duplicateSelectedCustomElement()">
+                  📑 複製 (Copy)
+                </button>
+                <button class="btn" style="flex:1; color:#C53030; border-color:rgba(197,48,48,0.3); justify-content:center;" onclick="deleteSelectedCustomElement()">
+                  🗑️ 刪除 (Del)
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 新增：本月畫布元素清單 -->
+          <div class="control-card">
+            <h3>
+              <span>3. 本月已放置元素清單</span>
+              <small id="monthElementsCountLabel" style="color:var(--text-muted); font-weight:500;">0 個</small>
+            </h3>
+            <div class="element-list-box" id="currentMonthElementsList"></div>
+          </div>
+
+          <!-- 新增：跨月份共用貼紙圖片素材庫 -->
+          <div class="control-card">
+            <h3>
+              <span>4. 跨月份貼紙/圖片素材庫</span>
+              <small style="color:var(--text-muted); font-weight:500;">切換月份隨時重用</small>
+            </h3>
+            <p style="font-size:11px; color:var(--text-muted);">
+              你上載過嘅貼紙或圖片會自動保存在此。去到其他月份時，撳 <strong>「＋加入本月」</strong> 即可直接放落畫布！
+            </p>
+            <div class="asset-library-grid" id="stickerAssetLibraryGrid"></div>
+          </div>
+        </div>
+
+        <!-- 分頁 6：中港台紅日與寵物紀念日 -->
+        <div class="tab-pane" id="tabHoliday">
+          <div class="control-card">
+            <h3>1. 2027 地區公眾假期切換</h3>
+            <div style="display:flex; gap:6px;">
+              <button class="btn" style="flex:1; justify-content:center;" onclick="switchRegion('HK')">🇭🇰 香港紅日</button>
+              <button class="btn" style="flex:1; justify-content:center;" onclick="switchRegion('TW')">🇹🇼 台灣國定</button>
+              <button class="btn" style="flex:1; justify-content:center;" onclick="switchRegion('CN')">🇨🇳 大陸法定</button>
+            </div>
+            <div class="form-row" style="margin-top:4px;">
+              <label>顯示農曆初一十五及廿四節氣</label>
+              <input type="checkbox" checked id="showLunarCheck" onchange="renderCalendarGrid()">
+            </div>
+          </div>
+
+          <div class="control-card">
+            <h3>2. 新增寵物專屬紀念日 (生日/打針)</h3>
+            <div class="form-row">
+              <label>月份與日子</label>
+              <div style="display:flex; gap:6px; width:170px;">
+                <select id="petEventMonthSelect">
+                  <option value="1">1月</option><option value="2">2月</option><option value="3">3月</option>
+                  <option value="4">4月</option><option value="5">5月</option><option value="6">6月</option>
+                  <option value="7">7月</option><option value="8">8月</option><option value="9">9月</option>
+                  <option value="10">10月</option><option value="11">11月</option><option value="12">12月</option>
+                </select>
+                <input type="number" id="petEventDayInput" min="1" max="31" value="15" placeholder="日">
+              </div>
+            </div>
+            <div class="form-row">
+              <label>紀念日名稱</label>
+              <input type="text" id="petEventNameInput" placeholder="例如：🐾 寶豬生日" style="width:170px;">
+            </div>
+            <button class="btn btn-primary" style="width:100%; justify-content:center;" onclick="addCustomPetEvent()">
+              ＋ 加入紀念日標記
+            </button>
+            <div id="petEventsList" style="display:flex; flex-direction:column; gap:5px; margin-top:4px; font-size:11.5px;"></div>
+          </div>
+        </div>
+
+      </div>
+    </aside>
+  </main>
+
+  <!-- ==================== 底部免責聲明與作者 Threads 聯絡區 ==================== -->
+  <footer class="site-footer liquid-glass">
+    <div class="footer-top">
+      <div>
+        <strong style="color:var(--text-dark); font-size:13px;">🐾 2027 寵物月曆自由設計工作室 Pro (Open Web Studio)</strong>
+        <p style="font-size:11.5px; margin-top:2px;">Designed for Pet Lovers • 支援香港 🇭🇰 / 台灣 🇹🇼 / 大陸 🇨🇳 2027 假期與農曆</p>
+      </div>
+      <a href="https://www.threads.com/@yinuo_nonononono" target="_blank" rel="noopener noreferrer" class="threads-badge">
+        <span>💬 Contact me on Threads: @yinuo_nonononono</span>
+      </a>
+    </div>
+
+    <div class="disclaimer-grid">
+      <div class="disclaimer-item">
+        <strong>1. 圖片及字型版權免責聲明（重要）：</strong><br>
+        本網站僅提供線上版面設計與排版工具。<strong>用戶自行上傳、匯入及使用之所有相片、背景、插畫、貼紙圖案及自訂字型檔案，其著作權與肖像權均歸原權利人所有，相關版權合規責任概由用戶自行承擔，本網站及開發者一概不負任何法律及版權責任。</strong>請勿將受版權保護之素材用於未授權之商業用途。
+      </div>
+      <div class="disclaimer-item">
+        <strong>2. 純本機私隱保護與資料保存責任：</strong><br>
+        本工具採用 100% 純前端瀏覽器運算，您上傳之寵物相片與設計資料<strong>絕對不會上傳至任何外部伺服器</strong>。惟瀏覽器快取可能因系統清理、無痕模式或容量限制而重置，<strong>請用戶務必自行點擊「💾 備份專案 (.json)」及導出成品圖片保存，本網站對任何本機資料遺失概不負責。</strong>
+      </div>
+      <div class="disclaimer-item">
+        <strong>3. 公眾假期數據與印刷色差提示：</strong><br>
+        內置之 2027 年香港、台灣及中國大陸公眾假期與農曆資料僅供排版參考（用戶亦可雙擊自由修改），付印前請務必再次核對。此外，螢幕顯示（RGB 色光）與實體印刷（CMYK 油墨及不同紙質）存在自然物理色差，最終成品顏色請以印刷廠實物打樣為準。
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== 300 DPI 無損多格式匯出 Modal ==================== -->
+  <div class="modal-backdrop" id="exportModal" onclick="if(event.target===this) closeExportModal()">
+    <div class="modal-card">
+      <div style="display:flex; align-items:center; justify-content:space-between;">
+        <h3 style="font-size:16px; color:var(--primary);">✨ 無損 300 DPI 印刷級導出中心</h3>
+        <button class="btn" onclick="closeExportModal()">✕ 關閉</button>
+      </div>
+
+      <p style="font-size:12px; color:var(--text-muted); line-height:1.5;">
+        系統會自動隱藏所有編輯輔助框線與未上傳相片之虛線提示，並鎖定你所選尺寸嘅 <strong>1:1 原始比例與 300 DPI 印刷級超高像素（Pixel Ratio 3.125x，例如 B5 橫向輸出為 2953 × 2078 px）</strong>，確保相片與文字細節 100% 無損、絕不變形或被壓縮！
+      </p>
+
+      <!-- 選項 1：無損 PNG -->
+      <div class="export-option-card">
+        <div class="export-option-info">
+          <h4>🖼️ 匯出 300 DPI 無損高清 PNG (推薦手機/電腦)</h4>
+          <p>零壓縮無損畫質，完整保留透明細節與銳利文字，適合直接交畀印刷店或手機相簿收藏。</p>
+        </div>
+        <button class="btn btn-primary" id="btnExportPNG" onclick="exportHighResImage('png')">
+          下載無損 PNG
+        </button>
+      </div>
+
+      <!-- 選項 2：最高品質 JPG -->
+      <div class="export-option-card">
+        <div class="export-option-info">
+          <h4>📸 匯出 300 DPI 最高品質 JPG (Quality 1.0)</h4>
+          <p>100% 不降採樣、不壓縮尺寸，相容所有網上沖晒店、淘寶定制及傳統印刷系統。</p>
+        </div>
+        <button class="btn btn-primary" id="btnExportJPG" onclick="exportHighResImage('jpeg')">
+          下載高清 JPG
+        </button>
+      </div>
+
+      <!-- 選項 3：矢量文字印刷級 PDF -->
+      <div class="export-option-card">
+        <div class="export-option-info">
+          <h4>📄 匯出印刷級矢量 PDF (適合電腦 Chrome / Safari)</h4>
+          <p>調用系統原生向量列印引擎，請喺彈出視窗揀「另存為 PDF」並勾選「背景圖形」。</p>
+        </div>
+        <button class="btn" onclick="exportVectorPDF()">
+          列印 / 存為 PDF
+        </button>
+      </div>
+
+      <!-- 手機版預覽長按儲存區 -->
+      <div id="mobileImagePreviewArea">
+        <strong style="font-size:12px; color:var(--primary);" id="mobilePreviewTitle">✅ 300 DPI 高清大圖已生成！</strong>
+        <p style="font-size:11px; color:var(--text-muted);">如使用手機或 IG / Threads 內置瀏覽器未能自動彈出下載，請直接<strong>「長按下方圖片 ➔ 儲存至相簿」</strong>（100% 原尺寸無損）：</p>
+        <img id="generatedHighResPreview" alt="Generated High Res Calendar">
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== 核心 JavaScript 引擎 ==================== -->
+  <script>
+    /********************************************************************
+     * 1. 2027 丁未羊年 中港台三地公眾假期 + 農曆 + 廿四節氣完整資料庫
+     ********************************************************************/
+    const MONTH_NAMES_EN = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+
+    const DAYS_IN_MONTH_2027 = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    const FIRST_DAY_WEEKDAY_2027 = [5, 1, 1, 4, 6, 2, 4, 0, 3, 5, 1, 3];
+
+    const HOLIDAYS_HK_2027 = {
+      "1-1": "元旦",
+      "2-6": "年初一", "2-8": "年初三", "2-9": "初四補假",
+      "3-26": "受難節", "3-27": "受難節翌日", "3-29": "復活節",
+      "4-5": "清明節",
+      "5-1": "勞動節", "5-13": "佛誕",
+      "6-9": "端午節",
+      "7-1": "回歸紀念",
+      "9-16": "中秋翌日",
+      "10-1": "國慶日", "10-8": "重陽節",
+      "12-25": "聖誕節", "12-27": "聖誕補假"
+    };
+
+    const HOLIDAYS_TW_2027 = {
+      "1-1": "元旦",
+      "2-5": "小年夜", "2-6": "春節初一", "2-7": "初二", "2-8": "初三", "2-9": "補假", "2-10": "補假",
+      "2-28": "和平紀念", "3-1": "和平補假",
+      "4-4": "兒童節", "4-5": "清明節", "4-6": "補假",
+      "5-1": "勞動節",
+      "6-9": "端午節",
+      "9-15": "中秋節",
+      "10-10": "雙十國慶", "10-11": "國慶補假"
+    };
+
+    const HOLIDAYS_CN_2027 = {
+      "1-1": "元旦",
+      "2-6": "春節", "2-7": "初二", "2-8": "初三", "2-9": "初四", "2-10": "初五", "2-11": "初六", "2-12": "初七",
+      "4-5": "清明節",
+      "5-1": "勞動節", "5-2": "勞動節", "5-3": "勞動節",
+      "6-9": "端午節",
+      "9-15": "中秋節",
+      "10-1": "國慶節", "10-2": "國慶", "10-3": "國慶", "10-4": "國慶", "10-5": "國慶", "10-6": "國慶", "10-7": "國慶"
+    };
+
+    const SOLAR_TERMS_2027 = {
+      "1-5": "小寒", "1-20": "大寒",
+      "2-4": "立春", "2-19": "雨水", "2-20": "元宵",
+      "3-6": "驚蟄", "3-21": "春分",
+      "4-5": "清明", "4-20": "穀雨",
+      "5-6": "立夏", "5-21": "小滿",
+      "6-6": "芒種", "6-21": "夏至",
+      "7-7": "小暑", "7-23": "大暑",
+      "8-8": "立秋", "8-23": "處暑",
+      "9-8": "白露", "9-15": "中秋", "9-23": "秋分",
+      "10-8": "寒露", "10-24": "霜降",
+      "11-7": "立冬", "11-22": "小雪",
+      "12-7": "大雪", "12-22": "冬至"
+    };
+
+    const LUNAR_NEW_MOONS_2027 = [
+      { m: 1, d: 8, name: "臘月" },
+      { m: 2, d: 6, name: "正月" },
+      { m: 3, d: 8, name: "二月" },
+      { m: 4, d: 7, name: "三月" },
+      { m: 5, d: 6, name: "四月" },
+      { m: 6, d: 5, name: "五月" },
+      { m: 7, d: 4, name: "六月" },
+      { m: 8, d: 2, name: "七月" },
+      { m: 9, d: 1, name: "八月" },
+      { m: 9, d: 30, name: "九月" },
+      { m: 10, d: 29, name: "十月" },
+      { m: 11, d: 28, name: "冬月" },
+      { m: 12, d: 28, name: "臘月" }
+    ];
+
+    const LUNAR_DAY_STR = [
+      "初一","初二","初三","初四","初五","初六","初七","初八","初九","初十",
+      "十一","十二","十三","十四","十五","十六","十七","十八","十九","二十",
+      "廿一","廿二","廿三","廿四","廿五","廿六","廿七","廿八","廿九","三十"
+    ];
+
+    function getLunarString2027(month, day) {
+      const targetDate = new Date(2027, month - 1, day);
+      let baseNewMoon = new Date(2026, 11, 9);
+      let lunarMonthName = "冬月";
+
+      for (let i = 0; i < LUNAR_NEW_MOONS_2027.length; i++) {
+        const nm = LUNAR_NEW_MOONS_2027[i];
+        const nmDate = new Date(2027, nm.m - 1, nm.d);
+        if (targetDate >= nmDate) {
+          baseNewMoon = nmDate;
+          lunarMonthName = nm.name;
+        } else {
+          break;
+        }
+      }
+      const diffDays = Math.round((targetDate - baseNewMoon) / (1000 * 60 * 60 * 24));
+      if (diffDays === 0) return lunarMonthName;
+      return LUNAR_DAY_STR[diffDays % 30] || "";
+    }
+
+    /********************************************************************
+     * 2. 應用程式狀態 State (方法 B 佔位框、各月獨立元素、跨月貼紙庫、背景圖)
+     ********************************************************************/
+    let appState = {
+      currentMonth: 1,
+      region: 'HK',
+      weekStart: 'SUN',
+      sizeCode: 'B5',
+      orientation: 'landscape',
+      paperWidthPx: 945,
+      paperHeightPx: 665,
+      snapGridEnabled: false,
+      snapGridSize: 20,
+      photoFilter: 'filter-oil',
+      gridPreset: 'none',
+      gridLineStyle: 'solid',
+      gridBorderWidth: 0,
+      gridBorderColor: '#DCD6CF',
+      gridOuterBorder: false,
+      gridTopLeftAlign: false,
+      dayNumFontSize: 16,
+      daySubFontSize: 9.5,
+      colors: {
+        paperBg: '#FAF8F5',
+        calText: '#33302E',
+        calHoliday: '#C46D5E',
+        calSub: '#8C8581'
+      },
+      fonts: {
+        en: "'Cormorant Garamond', serif",
+        zh: "'Noto Serif TC', serif",
+        customFontDataUrl: null,
+        customFontName: null
+      },
+      // 背景設定 (可全域或按月獨立)
+      bgScope: 'global',
+      globalBg: {
+        src: null,
+        opacity: 0.35,
+        scale: 1,
+        rotate: 0,
+        panX: 0,
+        panY: 0
+      },
+      monthsData: {},
+      stickerLibrary: [], // 跨月份共用嘅貼紙圖片素材庫 [{ id, name, src }]
+      petEvents: [
+        { month: 1, day: 20, title: "🐾 寶豬領養日" }
+      ]
+    };
+
+    // 初始化 12 個月獨立數據（預設 photoSrc 為 null 顯示「點擊此處上載相片 🐾」，elements 按月獨立）
+    for (let m = 1; m <= 12; m++) {
+      appState.monthsData[m] = {
+        photoSrc: null,
+        scale: 1,
+        focusX: 50,
+        focusY: 50,
+        customUploaded: false,
+        elements: [], // 該月專屬嘅自由文字與貼紙
+        bg: {
+          src: null,
+          opacity: 0.35,
+          scale: 1,
+          rotate: 0,
+          panX: 0,
+          panY: 0
+        }
+      };
+    }
+
+    /********************************************************************
+     * 3. 純本機 IndexedDB 自動防呆暫存系統
+     ********************************************************************/
+    const DB_NAME = 'PetCalendarStudio2027_DB';
+    const STORE_NAME = 'projects';
+    let dbInstance = null;
+    let saveTimer = null;
+
+    function initIndexedDB() {
+      return new Promise((resolve) => {
+        if (!window.indexedDB) return resolve(null);
+        const request = indexedDB.open(DB_NAME, 1);
+        request.onupgradeneeded = (e) => {
+          const db = e.target.result;
+          if (!db.objectStoreNames.contains(STORE_NAME)) {
+            db.createObjectStore(STORE_NAME);
+          }
+        };
+        request.onsuccess = (e) => {
+          dbInstance = e.target.result;
+          resolve(dbInstance);
+        };
+        request.onerror = () => resolve(null);
+      });
+    }
+
+    function saveStateToIndexedDB() {
+      const badge = document.getElementById('saveStatusBadge');
+      if (badge) {
+        badge.textContent = '⏳ 正在自動暫存...';
+        badge.style.background = 'rgba(217, 155, 67, 0.15)';
+        badge.style.color = '#8C5811';
+      }
+
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(() => {
+        const snapshot = collectFullProjectSnapshot();
+        if (!dbInstance) return;
+        try {
+          const tx = dbInstance.transaction(STORE_NAME, 'readwrite');
+          const store = tx.objectStore(STORE_NAME);
+          store.put(snapshot, 'autosave_2027_v3');
+          tx.oncomplete = () => {
+            if (badge) {
+              const now = new Date();
+              const timeStr = now.toTimeString().slice(0, 5);
+              badge.textContent = `✓ 本機已暫存 (${timeStr})`;
+              badge.style.background = 'rgba(46, 139, 87, 0.12)';
+              badge.style.color = '#266D45';
+            }
+          };
+        } catch (err) {
+          console.warn('IndexedDB 暫存略過:', err);
+        }
+      }, 400);
+    }
+
+    function loadStateFromIndexedDB() {
+      return new Promise((resolve) => {
+        if (!dbInstance) return resolve(null);
+        try {
+          const tx = dbInstance.transaction(STORE_NAME, 'readonly');
+          const store = tx.objectStore(STORE_NAME);
+          const req = store.get('autosave_2027_v3');
+          req.onsuccess = () => resolve(req.result || null);
+          req.onerror = () => resolve(null);
+        } catch (e) {
+          resolve(null);
+        }
+      });
+    }
+
+    function collectFullProjectSnapshot() {
+      const coreIds = ['itemPhoto', 'itemYear', 'itemMonthTitle', 'itemCalendarGrid'];
+      const coreBoxes = {};
+      coreIds.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          coreBoxes[id] = {
+            left: el.style.left,
+            top: el.style.top,
+            width: el.style.width,
+            height: el.style.height,
+            opacity: el.style.opacity || '1'
+          };
+        }
+      });
+
+      return {
+        version: '2027.3.0',
+        timestamp: Date.now(),
+        appState: JSON.parse(JSON.stringify(appState)),
+        coreBoxes,
+        yearText: document.getElementById('yearTextBox')?.innerText || '2027',
+        yearFontSize: document.getElementById('yearTextBox')?.style.fontSize || '30px',
+        monthFontSize: document.getElementById('monthTextBox')?.style.fontSize || '30px'
+      };
+    }
+
+    async function applyProjectSnapshot(snapshot) {
+      if (!snapshot || !snapshot.appState) return;
+      appState = Object.assign(appState, snapshot.appState);
+
+      // 向下相容舊版備份檔：確保每個月都有 elements 同 bg 結構
+      for (let m = 1; m <= 12; m++) {
+        if (!appState.monthsData[m]) {
+          appState.monthsData[m] = { photoSrc: null, scale: 1, focusX: 50, focusY: 50, customUploaded: false, elements: [], bg: { src: null, opacity: 0.35, scale: 1, rotate: 0, panX: 0, panY: 0 } };
+        }
+        if (!Array.isArray(appState.monthsData[m].elements)) {
+          appState.monthsData[m].elements = [];
+        }
+        if (typeof appState.monthsData[m].focusX !== 'number') appState.monthsData[m].focusX = 50;
+        if (typeof appState.monthsData[m].focusY !== 'number') appState.monthsData[m].focusY = 50;
+        if (!appState.monthsData[m].bg) {
+          appState.monthsData[m].bg = { src: null, opacity: 0.35, scale: 1, rotate: 0, panX: 0, panY: 0 };
+        }
+      }
+      if (!Array.isArray(appState.stickerLibrary)) appState.stickerLibrary = [];
+      if (!appState.globalBg) appState.globalBg = { src: null, opacity: 0.35, scale: 1, rotate: 0, panX: 0, panY: 0 };
+
+      const paper = document.getElementById('calendarPaper');
+      paper.style.width = appState.paperWidthPx + 'px';
+      paper.style.height = appState.paperHeightPx + 'px';
+
+      if (snapshot.coreBoxes) {
+        Object.keys(snapshot.coreBoxes).forEach(id => {
+          const el = document.getElementById(id);
+          const box = snapshot.coreBoxes[id];
+          if (el && box) {
+            el.style.left = box.left;
+            el.style.top = box.top;
+            el.style.width = box.width;
+            el.style.height = box.height;
+            el.style.opacity = box.opacity || '1';
+          }
+        });
+      }
+
+      if (snapshot.yearText) document.getElementById('yearTextBox').innerText = snapshot.yearText;
+      if (snapshot.yearFontSize) document.getElementById('yearTextBox').style.fontSize = snapshot.yearFontSize;
+      if (snapshot.monthFontSize) document.getElementById('monthTextBox').style.fontSize = snapshot.monthFontSize;
+
+      if (appState.colors) {
+        applyColorTheme(
+          appState.colors.paperBg,
+          appState.colors.calText,
+          appState.colors.calHoliday,
+          appState.colors.calSub,
+          false
+        );
+      }
+
+      if (appState.fonts && appState.fonts.customFontDataUrl && appState.fonts.customFontName) {
+        try {
+          const fontFace = new FontFace(appState.fonts.customFontName, `url(${appState.fonts.customFontDataUrl})`);
+          const loadedFace = await fontFace.load();
+          document.fonts.add(loadedFace);
+        } catch (err) {
+          console.warn('自訂字型還原失敗:', err);
+        }
+      }
+      document.documentElement.style.setProperty('--font-en', appState.fonts.en);
+      document.documentElement.style.setProperty('--font-zh', appState.fonts.zh);
+
+      const frameInner = document.getElementById('photoFrameInner');
+      frameInner.className = 'photo-frame-inner ' + (appState.photoFilter === 'none' ? '' : appState.photoFilter);
+
+      document.querySelectorAll('.region-pill').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.region === appState.region);
+      });
+
+      // 還原網格對齊狀態
+      syncSnapGridUI();
+      renderStickerAssetLibrary();
+      renderMonthBar();
+      switchMonth(appState.currentMonth, false);
+      renderPetEventsList();
+      applyGridBorders();
+    }
+
+    function clearAllStorageData() {
+      if (!confirm('確定要清空所有本機暫存進度並還原為預設 B5 橫向範本嗎？')) return;
+      if (dbInstance) {
+        const tx = dbInstance.transaction(STORE_NAME, 'readwrite');
+        tx.objectStore(STORE_NAME).delete('autosave_2027_v3');
+      }
+      location.reload();
+    }
+
+    /********************************************************************
+     * 4. 一鍵匯出與讀取 .json 專案備份檔
+     ********************************************************************/
+    function exportProjectJSON() {
+      const snapshot = collectFullProjectSnapshot();
+      const jsonStr = JSON.stringify(snapshot, null, 2);
+      const blob = new Blob([jsonStr], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      const dateStr = new Date().toISOString().slice(0, 10);
+      a.href = url;
+      a.download = `2027_Pet_Calendar_Backup_${dateStr}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    function importProjectJSON(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        try {
+          const snapshot = JSON.parse(e.target.result);
+          await applyProjectSnapshot(snapshot);
+          saveStateToIndexedDB();
+          alert('✅ 專案備份檔已成功還原！');
+        } catch (err) {
+          alert('❌ 無法讀取該 JSON 備份檔，請確認檔案格式正確。');
+        }
+      };
+      reader.readAsText(file);
+      event.target.value = '';
+    }
+
+    /********************************************************************
+     * 5. 月份導航、相片佔位框切換與日曆網格渲染
+     ********************************************************************/
+    function renderMonthBar() {
+      const bar = document.getElementById('monthBar');
+      bar.innerHTML = '';
+      for (let m = 1; m <= 12; m++) {
+        const btn = document.createElement('button');
+        const hasCustom = Boolean(appState.monthsData[m]?.photoSrc);
+        btn.className = `month-chip ${m === appState.currentMonth ? 'active' : ''} ${hasCustom ? 'has-photo' : ''}`;
+        btn.innerHTML = `<span>${m}月</span><small style="opacity:0.75">${MONTH_NAMES_EN[m - 1].slice(0, 3)}</small>`;
+        btn.onclick = () => switchMonth(m);
+        bar.appendChild(btn);
+      }
+    }
+
+    function switchMonth(month, triggerSave = true) {
+      appState.currentMonth = month;
+      selectedElementId = null;
+      renderMonthBar();
+
+      // 更新月份標題
+      const monthTitleEl = document.getElementById('monthTextBox');
+      monthTitleEl.innerText = `${MONTH_NAMES_EN[month - 1]}/ ${month}`;
+
+      // 更新本月主相片或顯示「點擊此處上載相片 🐾」佔位框
+      const mData = appState.monthsData[month];
+      const imgEl = document.getElementById('mainPetPhoto');
+      const placeholderBox = document.getElementById('photoPlaceholderBox');
+
+      if (mData && mData.photoSrc) {
+        imgEl.src = mData.photoSrc;
+        imgEl.style.display = 'block';
+        placeholderBox.style.display = 'none';
+      } else {
+        imgEl.removeAttribute('src');
+        imgEl.style.display = 'none';
+        placeholderBox.style.display = 'flex';
+      }
+
+      document.getElementById('photoScaleSlider').value = mData.scale ?? 1;
+      document.getElementById('photoFocusXSlider').value = mData.focusX ?? 50;
+      document.getElementById('photoFocusYSlider').value = mData.focusY ?? 50;
+      applyPhotoTransformToDOM(mData.scale ?? 1, mData.focusX ?? 50, mData.focusY ?? 50);
+
+      // 渲染該月份專屬背景圖與自由元素層
+      syncBgControlsAndDOM();
+      renderCustomElementsLayer();
+      renderCalendarGrid();
+      updateInspectorForSelectedElement();
+
+      if (triggerSave) saveStateToIndexedDB();
+    }
+
+    function switchRegion(regionCode) {
+      appState.region = regionCode;
+      document.querySelectorAll('.region-pill').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.region === regionCode);
+      });
+      renderCalendarGrid();
+      saveStateToIndexedDB();
+    }
+
+    function renderCalendarGrid() {
+      const weekdaysRow = document.getElementById('weekdaysRow');
+      const daysMatrix = document.getElementById('daysMatrix');
+      weekdaysRow.innerHTML = '';
+      daysMatrix.innerHTML = '';
+
+      const labelsSunStart = [
+        { label: '日 Sun', weekend: true },
+        { label: '一 Mon', weekend: false },
+        { label: '二 Tue', weekend: false },
+        { label: '三 Wed', weekend: false },
+        { label: '四 Thu', weekend: false },
+        { label: '五 Fri', weekend: false },
+        { label: '六 Sat', weekend: true }
+      ];
+      const labelsMonStart = [
+        { label: '一 Mon', weekend: false },
+        { label: '二 Tue', weekend: false },
+        { label: '三 Wed', weekend: false },
+        { label: '四 Thu', weekend: false },
+        { label: '五 Fri', weekend: false },
+        { label: '六 Sat', weekend: true },
+        { label: '日 Sun', weekend: true }
+      ];
+
+      const activeLabels = appState.weekStart === 'SUN' ? labelsSunStart : labelsMonStart;
+      activeLabels.forEach(item => {
+        const cell = document.createElement('div');
+        cell.className = 'weekday-cell' + (item.weekend ? ' is-weekend' : '');
+        cell.textContent = item.label;
+        weekdaysRow.appendChild(cell);
+      });
+
+      const m = appState.currentMonth;
+      const totalDays = DAYS_IN_MONTH_2027[m - 1];
+      let firstWeekday = FIRST_DAY_WEEKDAY_2027[m - 1];
+      if (appState.weekStart === 'MON') {
+        firstWeekday = (firstWeekday + 6) % 7;
+      }
+
+      for (let i = 0; i < firstWeekday; i++) {
+        const emptyCell = document.createElement('div');
+        emptyCell.className = 'day-cell empty';
+        daysMatrix.appendChild(emptyCell);
+      }
+
+      const showLunar = document.getElementById('showLunarCheck')?.checked ?? true;
+      const holidayMap = appState.region === 'HK'
+        ? HOLIDAYS_HK_2027
+        : (appState.region === 'TW' ? HOLIDAYS_TW_2027 : HOLIDAYS_CN_2027);
+
+      for (let d = 1; d <= totalDays; d++) {
+        const cell = document.createElement('div');
+        const dateKey = `${m}-${d}`;
+        const actualDayOfWeek = (FIRST_DAY_WEEKDAY_2027[m - 1] + d - 1) % 7;
+
+        const holidayName = holidayMap[dateKey];
+        const solarTerm = SOLAR_TERMS_2027[dateKey];
+        const petEvent = appState.petEvents.find(ev => Number(ev.month) === m && Number(ev.day) === d);
+
+        const isSunday = actualDayOfWeek === 0;
+        const isHoliday = Boolean(holidayName) || isSunday;
+
+        let subText = '';
+        if (petEvent) {
+          subText = petEvent.title;
+        } else if (holidayName) {
+          subText = holidayName;
+        } else if (showLunar) {
+          subText = solarTerm || getLunarString2027(m, d);
+        }
+
+        cell.className = 'day-cell' +
+          (isHoliday ? ' is-holiday' : '') +
+          (petEvent ? ' is-pet-event' : '');
+
+        cell.innerHTML = `
+          <span class="day-num" style="font-size:${appState.dayNumFontSize}px">${d}</span>
+          <span class="day-sub" contenteditable="true" spellcheck="false" title="雙擊可直接修改下方文字" style="font-size:${appState.daySubFontSize}px">${subText}</span>
+        `;
+        daysMatrix.appendChild(cell);
+      }
+
+      applyGridBorders();
+    }
+
+    /********************************************************************
+     * 6. 尺寸切換、網格對齊 (Grid Snap) 與自訂背景圖功能
+     ********************************************************************/
+    const SIZE_SPECS_MM = {
+      B5: { w: 176, h: 250 },
+      A5: { w: 148, h: 210 },
+      SQ: { w: 150, h: 150 },
+      A4: { w: 210, h: 297 },
+      A3: { w: 297, h: 420 },
+      DESK_WIDE: { w: 140, h: 210 }
+    };
+
+    function applySizePreset(sizeCode, orientation, btnEl) {
+      if (btnEl) {
+        document.querySelectorAll('#tabSize .preset-btn').forEach(b => b.classList.remove('active'));
+        btnEl.classList.add('active');
+      }
+
+      appState.sizeCode = sizeCode;
+      appState.orientation = orientation;
+
+      const spec = SIZE_SPECS_MM[sizeCode] || SIZE_SPECS_MM.B5;
+      let widthMm = spec.w;
+      let heightMm = spec.h;
+
+      if (sizeCode !== 'SQ') {
+        if (orientation === 'landscape' && widthMm < heightMm) {
+          [widthMm, heightMm] = [heightMm, widthMm];
+        } else if (orientation === 'portrait' && widthMm > heightMm) {
+          [widthMm, heightMm] = [heightMm, widthMm];
+        }
+      }
+
+      const pxPerMm = 3.7795275591;
+      const scaleFactor = sizeCode === 'A3' ? 0.72 : (sizeCode === 'A4' ? 0.85 : 1);
+
+      appState.paperWidthPx = Math.round(widthMm * pxPerMm * scaleFactor);
+      appState.paperHeightPx = Math.round(heightMm * pxPerMm * scaleFactor);
+
+      const paper = document.getElementById('calendarPaper');
+      paper.style.width = appState.paperWidthPx + 'px';
+      paper.style.height = appState.paperHeightPx + 'px';
+
+      if (orientation === 'landscape') {
+        applyQuickAutoLayout('sideBySide');
+      } else {
+        applyQuickAutoLayout('topBottom');
+      }
+
+      autoFitCanvasInViewport();
+      saveStateToIndexedDB();
+    }
+
+    function applyQuickAutoLayout(mode) {
+      const W = appState.paperWidthPx;
+      const H = appState.paperHeightPx;
+
+      const itemPhoto = document.getElementById('itemPhoto');
+      const itemYear = document.getElementById('itemYear');
+      const itemMonth = document.getElementById('itemMonthTitle');
+      const itemGrid = document.getElementById('itemCalendarGrid');
+
+      if (mode === 'sideBySide') {
+        const padX = Math.round(W * 0.05);
+        const padY = Math.round(H * 0.08);
+        const photoW = Math.round(W * 0.435);
+        const photoH = H - padY * 2;
+
+        itemPhoto.style.left = padX + 'px';
+        itemPhoto.style.top = padY + 'px';
+        itemPhoto.style.width = photoW + 'px';
+        itemPhoto.style.height = photoH + 'px';
+
+        const rightLeft = padX + photoW + Math.round(W * 0.04);
+        const rightW = W - rightLeft - padX;
+
+        itemYear.style.left = rightLeft + 'px';
+        itemYear.style.top = (padY + 4) + 'px';
+        itemYear.style.width = '130px';
+        itemYear.style.height = '42px';
+
+        itemMonth.style.left = (rightLeft + rightW - 210) + 'px';
+        itemMonth.style.top = (padY + 4) + 'px';
+        itemMonth.style.width = '210px';
+        itemMonth.style.height = '42px';
+
+        itemGrid.style.left = rightLeft + 'px';
+        itemGrid.style.top = (padY + 64) + 'px';
+        itemGrid.style.width = rightW + 'px';
+        itemGrid.style.height = (photoH - 64) + 'px';
+      } else {
+        const padX = Math.round(W * 0.085);
+        const padTop = Math.round(H * 0.065);
+        const contentW = W - padX * 2;
+        const photoH = Math.round(H * 0.41);
+
+        itemPhoto.style.left = padX + 'px';
+        itemPhoto.style.top = padTop + 'px';
+        itemPhoto.style.width = contentW + 'px';
+        itemPhoto.style.height = photoH + 'px';
+
+        const titleTop = padTop + photoH + Math.round(H * 0.032);
+        itemYear.style.left = padX + 'px';
+        itemYear.style.top = titleTop + 'px';
+        itemYear.style.width = '120px';
+        itemYear.style.height = '40px';
+
+        itemMonth.style.left = (padX + contentW - 210) + 'px';
+        itemMonth.style.top = titleTop + 'px';
+        itemMonth.style.width = '210px';
+        itemMonth.style.height = '40px';
+
+        const gridTop = titleTop + 52;
+        const gridH = H - gridTop - Math.round(H * 0.055);
+        itemGrid.style.left = padX + 'px';
+        itemGrid.style.top = gridTop + 'px';
+        itemGrid.style.width = contentW + 'px';
+        itemGrid.style.height = Math.max(180, gridH) + 'px';
+      }
+      saveStateToIndexedDB();
+    }
+
+    function resetCurrentMonthLayout() {
+      applyQuickAutoLayout(appState.orientation === 'landscape' ? 'sideBySide' : 'topBottom');
+    }
+
+    // 網格對齊開關與間距設定
+    function toggleSnapGrid(forceVal) {
+      if (typeof forceVal === 'boolean') {
+        appState.snapGridEnabled = forceVal;
+      } else {
+        appState.snapGridEnabled = !appState.snapGridEnabled;
+      }
+      syncSnapGridUI();
+      saveStateToIndexedDB();
+    }
+
+    function updateSnapGridSize(sizeVal) {
+      appState.snapGridSize = parseInt(sizeVal) || 20;
+      syncSnapGridUI();
+      saveStateToIndexedDB();
+    }
+
+    function syncSnapGridUI() {
+      const overlay = document.getElementById('snapGridOverlay');
+      const check = document.getElementById('snapGridCheck');
+      const toolbarBtn = document.getElementById('snapGridToolbarBtn');
+      const sizeSelect = document.getElementById('snapGridSizeSelect');
+
+      const gSize = appState.snapGridSize || 20;
+      overlay.style.backgroundSize = `${gSize}px ${gSize}px`;
+      overlay.classList.toggle('show', Boolean(appState.snapGridEnabled));
+
+      if (check) check.checked = Boolean(appState.snapGridEnabled);
+      if (sizeSelect) sizeSelect.value = String(gSize);
+      if (toolbarBtn) {
+        toolbarBtn.textContent = appState.snapGridEnabled ? `📏 網格對齊: 開 (${gSize}px)` : '📏 網格對齊: 關';
+        toolbarBtn.classList.toggle('active-toggle', Boolean(appState.snapGridEnabled));
+      }
+    }
+
+    // 背景圖片上載與調整 (大小、旋轉、透明度、位移)
+    function getActiveBgObject() {
+      return appState.bgScope === 'month'
+        ? appState.monthsData[appState.currentMonth].bg
+        : appState.globalBg;
+    }
+
+    function handleBgImageUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const bgObj = getActiveBgObject();
+        bgObj.src = e.target.result;
+        syncBgControlsAndDOM();
+        saveStateToIndexedDB();
+      };
+      reader.readAsDataURL(file);
+      event.target.value = '';
+    }
+
+    function removeCustomBgImage() {
+      const bgObj = getActiveBgObject();
+      bgObj.src = null;
+      syncBgControlsAndDOM();
+      saveStateToIndexedDB();
+    }
+
+    function changeBgScope(scope) {
+      appState.bgScope = scope;
+      syncBgControlsAndDOM();
+      saveStateToIndexedDB();
+    }
+
+    function updateBgTransform() {
+      const bgObj = getActiveBgObject();
+      bgObj.opacity = parseFloat(document.getElementById('bgOpacityRange').value);
+      bgObj.scale = parseFloat(document.getElementById('bgScaleRange').value);
+      bgObj.rotate = parseFloat(document.getElementById('bgRotateRange').value);
+      bgObj.panX = parseFloat(document.getElementById('bgPanXRange').value);
+      bgObj.panY = parseFloat(document.getElementById('bgPanYRange').value);
+      applyBgToDOM(bgObj);
+      saveStateToIndexedDB();
+    }
+
+    function syncBgControlsAndDOM() {
+      document.getElementById('bgScopeSelect').value = appState.bgScope || 'global';
+      const bgObj = getActiveBgObject();
+      document.getElementById('bgOpacityRange').value = bgObj.opacity ?? 0.35;
+      document.getElementById('bgScaleRange').value = bgObj.scale ?? 1;
+      document.getElementById('bgRotateRange').value = bgObj.rotate ?? 0;
+      document.getElementById('bgPanXRange').value = bgObj.panX ?? 0;
+      document.getElementById('bgPanYRange').value = bgObj.panY ?? 0;
+      applyBgToDOM(bgObj);
+    }
+
+    function applyBgToDOM(bgObj) {
+      const bgImg = document.getElementById('paperBgImg');
+      if (bgObj && bgObj.src) {
+        bgImg.src = bgObj.src;
+        bgImg.style.display = 'block';
+        bgImg.style.opacity = bgObj.opacity ?? 0.35;
+        bgImg.style.transform = `translate(${bgObj.panX || 0}px, ${bgObj.panY || 0}px) scale(${bgObj.scale || 1}) rotate(${bgObj.rotate || 0}deg)`;
+      } else {
+        bgImg.removeAttribute('src');
+        bgImg.style.display = 'none';
+      }
+    }
+
+    function autoFitCanvasInViewport() {
+      const viewport = document.getElementById('canvasViewport');
+      if (!viewport) return;
+      const vw = viewport.clientWidth - 40;
+      const scale = Math.min(1, Math.max(0.38, vw / appState.paperWidthPx));
+      const rounded = Math.round(scale * 20) / 20;
+      document.getElementById('zoomRange').value = rounded;
+      updateCanvasPreviewZoom(rounded);
+    }
+
+    function updateCanvasPreviewZoom(val) {
+      const wrapper = document.getElementById('canvasScaleWrapper');
+      wrapper.style.transform = `scale(${val})`;
+      document.getElementById('zoomLabel').textContent = Math.round(val * 100) + '%';
+    }
+
+    function toggleWireOGuide(show) {
+      document.getElementById('wireOGuide').classList.toggle('show', show);
+    }
+
+    /********************************************************************
+     * 7. 相片無損讀取與「零裁斷露底」焦點構圖引擎 (Focus X/Y + Auto-Cover)
+     ********************************************************************/
+    function handleSinglePhotoUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const m = appState.currentMonth;
+        appState.monthsData[m].photoSrc = e.target.result;
+        appState.monthsData[m].scale = 1;
+        appState.monthsData[m].focusX = 50;
+        appState.monthsData[m].focusY = 50;
+        appState.monthsData[m].customUploaded = true;
+        switchMonth(m, true);
+      };
+      reader.readAsDataURL(file);
+      event.target.value = '';
+    }
+
+    function clearCurrentMonthPhoto() {
+      const m = appState.currentMonth;
+      appState.monthsData[m].photoSrc = null;
+      appState.monthsData[m].scale = 1;
+      appState.monthsData[m].focusX = 50;
+      appState.monthsData[m].focusY = 50;
+      appState.monthsData[m].customUploaded = false;
+      switchMonth(m, true);
+    }
+
+    function handleBatchPhotosUpload(event) {
+      const files = Array.from(event.target.files).slice(0, 12);
+      if (!files.length) return;
+      let loadedCount = 0;
+      files.forEach((file, idx) => {
+        const targetMonth = idx + 1;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          appState.monthsData[targetMonth].photoSrc = e.target.result;
+          appState.monthsData[targetMonth].scale = 1;
+          appState.monthsData[targetMonth].focusX = 50;
+          appState.monthsData[targetMonth].focusY = 50;
+          appState.monthsData[targetMonth].customUploaded = true;
+          loadedCount++;
+          if (loadedCount === files.length) {
+            switchMonth(appState.currentMonth, true);
+            alert(`✅ 已成功將 ${files.length} 張高清相片無損分配至 1 至 ${files.length} 月！`);
+          }
+        };
+        reader.readAsDataURL(file);
+      });
+      event.target.value = '';
+    }
+
+    function updateCurrentPhotoTransform() {
+      const scale = parseFloat(document.getElementById('photoScaleSlider').value);
+      const focusX = parseFloat(document.getElementById('photoFocusXSlider').value);
+      const focusY = parseFloat(document.getElementById('photoFocusYSlider').value);
+
+      const m = appState.currentMonth;
+      appState.monthsData[m].scale = scale;
+      appState.monthsData[m].focusX = focusX;
+      appState.monthsData[m].focusY = focusY;
+
+      applyPhotoTransformToDOM(scale, focusX, focusY);
+      saveStateToIndexedDB();
+    }
+
+    function resetCurrentPhotoCrop() {
+      document.getElementById('photoScaleSlider').value = 1;
+      document.getElementById('photoFocusXSlider').value = 50;
+      document.getElementById('photoFocusYSlider').value = 50;
+      updateCurrentPhotoTransform();
+    }
+
+    // 核心解決方案：結合 object-position (0%~100%) 與微幅動態安全補償縮放，無論點樣上下移取景都唔會露底或裁斷！
+    function applyPhotoTransformToDOM(scale, focusX, focusY) {
+      const img = document.getElementById('mainPetPhoto');
+      const offsetRatioX = (focusX - 50) / 50; // -1 .. +1
+      const offsetRatioY = (focusY - 50) / 50; // -1 .. +1
+
+      // 當用家拉動上下/左右焦點而未手動放大時，自動提供柔和嘅邊緣保護縮放，確保相片永遠填滿相框唔露底
+      const edgeNeed = Math.max(Math.abs(offsetRatioX), Math.abs(offsetRatioY));
+      const effectiveScale = Math.max(scale, 1 + edgeNeed * 0.35);
+
+      const maxShiftPercent = ((effectiveScale - 1) / (2 * effectiveScale)) * 100;
+      const translateX = -offsetRatioX * maxShiftPercent;
+      const translateY = -offsetRatioY * maxShiftPercent;
+
+      img.style.objectPosition = `${focusX}% ${focusY}%`;
+      img.style.transform = `scale(${effectiveScale}) translate(${translateX}%, ${translateY}%)`;
+    }
+
+    function setPhotoFilter(filterClass, btnEl) {
+      if (btnEl) {
+        document.querySelectorAll('#tabPhoto .preset-btn').forEach(b => b.classList.remove('active'));
+        btnEl.classList.add('active');
+      }
+      appState.photoFilter = filterClass;
+      const frame = document.getElementById('photoFrameInner');
+      frame.className = 'photo-frame-inner ' + (filterClass === 'none' ? '' : filterClass);
+      saveStateToIndexedDB();
+    }
+
+    /********************************************************************
+     * 8. 日期框線樣式與字型調色盤
+     ********************************************************************/
+    function setGridBorderPreset(preset, btnEl) {
+      if (btnEl) {
+        document.querySelectorAll('#tabGrid .preset-btn').forEach(b => b.classList.remove('active'));
+        btnEl.classList.add('active');
+      }
+      appState.gridPreset = preset;
+
+      if (preset === 'none') {
+        appState.gridBorderWidth = 0;
+        appState.gridOuterBorder = false;
+      } else if (preset === 'full') {
+        appState.gridBorderWidth = 1;
+        appState.gridOuterBorder = true;
+      } else if (preset === 'horizontal') {
+        appState.gridBorderWidth = 1;
+        appState.gridOuterBorder = false;
+      } else if (preset === 'rounded-cards') {
+        appState.gridBorderWidth = 1;
+        appState.gridOuterBorder = false;
+      }
+
+      document.getElementById('gridBorderWidthRange').value = appState.gridBorderWidth;
+      document.getElementById('gridOuterBorderCheck').checked = appState.gridOuterBorder;
+      applyGridBorders();
+      saveStateToIndexedDB();
+    }
+
+    function updateGridBorderCustomization() {
+      appState.gridLineStyle = document.getElementById('gridLineStyleSelect').value;
+      appState.gridBorderWidth = parseFloat(document.getElementById('gridBorderWidthRange').value);
+      appState.gridBorderColor = document.getElementById('gridBorderColorPicker').value;
+      appState.gridOuterBorder = document.getElementById('gridOuterBorderCheck').checked;
+      applyGridBorders();
+      saveStateToIndexedDB();
+    }
+
+    function applyGridBorders() {
+      const cells = document.querySelectorAll('#daysMatrix .day-cell');
+      const matrix = document.getElementById('daysMatrix');
+      const w = appState.gridBorderWidth;
+      const style = appState.gridLineStyle;
+      const color = appState.gridBorderColor;
+
+      matrix.style.border = appState.gridOuterBorder ? `${Math.max(1, w)}px ${style} ${color}` : 'none';
+      matrix.style.gap = appState.gridPreset === 'rounded-cards' ? '4px' : '0px';
+
+      cells.forEach(cell => {
+        cell.style.border = 'none';
+        cell.style.borderRadius = '0px';
+        if (w > 0) {
+          if (appState.gridPreset === 'horizontal') {
+            cell.style.borderBottom = `${w}px ${style} ${color}`;
+          } else if (appState.gridPreset === 'rounded-cards') {
+            cell.style.border = `${w}px ${style} ${color}`;
+            cell.style.borderRadius = '8px';
+          } else {
+            cell.style.border = `${w * 0.5}px ${style} ${color}`;
+          }
+        }
+      });
+    }
+
+    function toggleGridTopLeftAlign(enabled) {
+      appState.gridTopLeftAlign = enabled;
+      document.getElementById('daysMatrix').classList.toggle('align-top-left', enabled);
+      saveStateToIndexedDB();
+    }
+
+    function changeWeekStartDay(val) {
+      appState.weekStart = val;
+      renderCalendarGrid();
+      saveStateToIndexedDB();
+    }
+
+    function updateTypographySettings() {
+      const enFont = document.getElementById('enFontSelect').value;
+      const zhFont = document.getElementById('zhFontSelect').value;
+      appState.fonts.en = enFont;
+      appState.fonts.zh = zhFont;
+      document.documentElement.style.setProperty('--font-en', enFont);
+      document.documentElement.style.setProperty('--font-zh', zhFont);
+      saveStateToIndexedDB();
+    }
+
+    function updateDayFontSize(val) {
+      appState.dayNumFontSize = parseFloat(val);
+      document.querySelectorAll('.day-num').forEach(el => el.style.fontSize = val + 'px');
+      saveStateToIndexedDB();
+    }
+
+    function updateSubFontSize(val) {
+      appState.daySubFontSize = parseFloat(val);
+      document.querySelectorAll('.day-sub').forEach(el => el.style.fontSize = val + 'px');
+      saveStateToIndexedDB();
+    }
+
+    function handleCustomFontUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        const dataUrl = e.target.result;
+        const fontName = 'UserCustomFont_' + Date.now();
+        try {
+          const fontFace = new FontFace(fontName, `url(${dataUrl})`);
+          const loaded = await fontFace.load();
+          document.fonts.add(loaded);
+
+          appState.fonts.customFontDataUrl = dataUrl;
+          appState.fonts.customFontName = fontName;
+          appState.fonts.en = `'${fontName}', serif`;
+          appState.fonts.zh = `'${fontName}', sans-serif`;
+
+          document.documentElement.style.setProperty('--font-en', appState.fonts.en);
+          document.documentElement.style.setProperty('--font-zh', appState.fonts.zh);
+          saveStateToIndexedDB();
+          alert(`✅ 已成功匯入並套用字型：${file.name}`);
+        } catch (err) {
+          alert('❌ 字型檔解析失敗，請確認檔案為有效嘅 .ttf / .otf / .woff2 格式。');
+        }
+      };
+      reader.readAsDataURL(file);
+      event.target.value = '';
+    }
+
+    function applyColorTheme(paperBg, calText, calHoliday, calSub, triggerSave = true) {
+      appState.colors = { paperBg, calText, calHoliday, calSub };
+      document.documentElement.style.setProperty('--paper-bg', paperBg);
+      document.documentElement.style.setProperty('--cal-text', calText);
+      document.documentElement.style.setProperty('--cal-holiday', calHoliday);
+      document.documentElement.style.setProperty('--cal-sub', calSub);
+
+      document.getElementById('paperBgPicker').value = paperBg;
+      document.getElementById('calTextPicker').value = calText;
+      document.getElementById('calHolidayPicker').value = calHoliday;
+      if (triggerSave) saveStateToIndexedDB();
+    }
+
+    function updateSingleColorVar(cssVar, val) {
+      document.documentElement.style.setProperty(cssVar, val);
+      if (cssVar === '--paper-bg') appState.colors.paperBg = val;
+      if (cssVar === '--cal-text') appState.colors.calText = val;
+      if (cssVar === '--cal-holiday') appState.colors.calHoliday = val;
+      saveStateToIndexedDB();
+    }
+
+    /********************************************************************
+     * 9. 按月份獨立嘅自由元素、透明度、清單管理、跨月貼紙素材庫 & Delete 鍵支援
+     ********************************************************************/
+    let selectedElementId = null;
+
+    function getCurrentMonthElements() {
+      return appState.monthsData[appState.currentMonth].elements;
+    }
+
+    function addCustomTextElement(defaultText = '✨ 在此輸入專屬文字') {
+      const id = 'custom_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
+      const newElem = {
+        id,
+        type: 'text',
+        text: defaultText,
+        left: Math.round(appState.paperWidthPx * 0.48),
+        top: Math.round(appState.paperHeightPx * 0.14),
+        width: 200,
+        height: 42,
+        fontSize: 20,
+        color: appState.colors.calText,
+        opacity: 1,
+        rotate: 0
+      };
+      getCurrentMonthElements().push(newElem);
+      renderCustomElementsLayer();
+      selectCanvasElement(id);
+      saveStateToIndexedDB();
+    }
+
+    function addEmojiSticker(emoji) {
+      const id = 'custom_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
+      const newElem = {
+        id,
+        type: 'text',
+        text: emoji,
+        left: Math.round(appState.paperWidthPx * 0.45),
+        top: Math.round(appState.paperHeightPx * 0.45),
+        width: 58,
+        height: 58,
+        fontSize: 38,
+        color: '#33302E',
+        opacity: 1,
+        rotate: 0
+      };
+      getCurrentMonthElements().push(newElem);
+      renderCustomElementsLayer();
+      selectCanvasElement(id);
+      saveStateToIndexedDB();
+    }
+
+    // 上載貼紙/圖片：同時加入當前月份畫布 + 自動存入「跨月份貼紙素材庫」
+    function handleStickerImageUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const dataUrl = e.target.result;
+        const assetId = 'asset_' + Date.now();
+        appState.stickerLibrary.unshift({
+          id: assetId,
+          name: file.name.replace(/\.[^/.]+$/, '') || '貼紙素材',
+          src: dataUrl
+        });
+        renderStickerAssetLibrary();
+        spawnStickerFromLibrary(assetId);
+      };
+      reader.readAsDataURL(file);
+      event.target.value = '';
+    }
+
+    function spawnStickerFromLibrary(assetId) {
+      const asset = appState.stickerLibrary.find(a => a.id === assetId);
+      if (!asset) return;
+      const id = 'custom_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
+      const newElem = {
+        id,
+        type: 'image',
+        name: asset.name,
+        src: asset.src,
+        left: Math.round(appState.paperWidthPx * 0.42),
+        top: Math.round(appState.paperHeightPx * 0.35),
+        width: 140,
+        height: 140,
+        opacity: 1,
+        rotate: 0
+      };
+      getCurrentMonthElements().push(newElem);
+      renderCustomElementsLayer();
+      selectCanvasElement(id);
+      saveStateToIndexedDB();
+    }
+
+    function removeAssetFromLibrary(assetId) {
+      appState.stickerLibrary = appState.stickerLibrary.filter(a => a.id !== assetId);
+      renderStickerAssetLibrary();
+      saveStateToIndexedDB();
+    }
+
+    function renderStickerAssetLibrary() {
+      const grid = document.getElementById('stickerAssetLibraryGrid');
+      if (!grid) return;
+      grid.innerHTML = '';
+
+      if (appState.stickerLibrary.length === 0) {
+        grid.innerHTML = `<div style="grid-column:1/-1; font-size:11px; color:var(--text-muted); text-align:center; padding:12px 4px;">暫無上載過嘅貼紙圖片，撳上方「＋上載貼紙/圖片」即可自動存入素材庫！</div>`;
+        return;
+      }
+
+      appState.stickerLibrary.forEach(asset => {
+        const card = document.createElement('div');
+        card.className = 'asset-card';
+        card.innerHTML = `
+          <div class="asset-card-preview">
+            <img src="${asset.src}" alt="${asset.name}">
+          </div>
+          <div class="asset-card-btns">
+            <button class="use-btn" onclick="spawnStickerFromLibrary('${asset.id}')" title="加到目前月份畫布">＋加入本月</button>
+            <button onclick="removeAssetFromLibrary('${asset.id}')" title="從素材庫移除" style="flex:0 0 24px; color:#C53030;">✕</button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function renderCustomElementsLayer() {
+      const layer = document.getElementById('customElementsLayer');
+      layer.innerHTML = '';
+      const elements = getCurrentMonthElements();
+
+      elements.forEach(item => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'canvas-item' + (selectedElementId === item.id ? ' selected' : '');
+        wrapper.id = item.id;
+        wrapper.dataset.itemType = 'custom';
+        wrapper.style.left = item.left + 'px';
+        wrapper.style.top = item.top + 'px';
+        wrapper.style.width = item.width + 'px';
+        wrapper.style.height = item.height + 'px';
+        wrapper.style.opacity = item.opacity ?? 1;
+        wrapper.style.transform = `rotate(${item.rotate || 0}deg)`;
+
+        if (item.type === 'text') {
+          const textDiv = document.createElement('div');
+          textDiv.contentEditable = 'true';
+          textDiv.spellcheck = false;
+          textDiv.style.fontFamily = 'var(--font-zh)';
+          textDiv.style.fontSize = (item.fontSize || 20) + 'px';
+          textDiv.style.color = item.color || '#33302E';
+          textDiv.style.width = '100%';
+          textDiv.style.height = '100%';
+          textDiv.style.display = 'flex';
+          textDiv.style.alignItems = 'center';
+          textDiv.innerText = item.text;
+          textDiv.oninput = () => {
+            item.text = textDiv.innerText;
+            renderCurrentMonthElementsList();
+            saveStateToIndexedDB();
+          };
+          wrapper.appendChild(textDiv);
+        } else if (item.type === 'image') {
+          const img = document.createElement('img');
+          img.src = item.src;
+          img.style.width = '100%';
+          img.style.height = '100%';
+          img.style.objectFit = 'contain';
+          img.style.pointerEvents = 'none';
+          wrapper.appendChild(img);
+        }
+
+        const handle = document.createElement('div');
+        handle.className = 'resize-handle';
+        handle.dataset.resize = item.id;
+        wrapper.appendChild(handle);
+
+        layer.appendChild(wrapper);
+      });
+
+      renderCurrentMonthElementsList();
+    }
+
+    function renderCurrentMonthElementsList() {
+      const listBox = document.getElementById('currentMonthElementsList');
+      const countLabel = document.getElementById('monthElementsCountLabel');
+      if (!listBox) return;
+
+      const elements = getCurrentMonthElements();
+      countLabel.textContent = `${elements.length} 個`;
+      listBox.innerHTML = '';
+
+      if (elements.length === 0) {
+        listBox.innerHTML = `<div style="font-size:11px; color:var(--text-muted); text-align:center; padding:10px;">本月暫無新增自由文字或貼紙</div>`;
+        return;
+      }
+
+      elements.forEach((item, index) => {
+        const row = document.createElement('div');
+        row.className = 'element-list-item' + (selectedElementId === item.id ? ' active' : '');
+        row.onclick = (e) => {
+          if (e.target.closest('button')) return;
+          selectCanvasElement(item.id);
+        };
+
+        const thumbHtml = item.type === 'image'
+          ? `<div class="elem-thumb"><img src="${item.src}" alt="sticker"></div>`
+          : `<div class="elem-thumb">🔤</div>`;
+
+        const titleStr = item.type === 'image'
+          ? (item.name || `貼紙圖片 #${index + 1}`)
+          : (item.text || '文字框');
+
+        row.innerHTML = `
+          ${thumbHtml}
+          <div class="elem-meta">${titleStr}</div>
+          <div class="elem-actions">
+            <button class="mini-icon-btn" onclick="duplicateCustomElementById('${item.id}')" title="複製多一個">📑 Copy</button>
+            <button class="mini-icon-btn" style="color:#C53030;" onclick="deleteCustomElementById('${item.id}')" title="刪除此元素">🗑️ Del</button>
+          </div>
+        `;
+        listBox.appendChild(row);
+      });
+    }
+
+    function selectCanvasElement(id) {
+      selectedElementId = id;
+      document.querySelectorAll('.canvas-item').forEach(el => {
+        el.classList.toggle('selected', el.id === id);
+      });
+      renderCurrentMonthElementsList();
+      updateInspectorForSelectedElement();
+    }
+
+    function updateInspectorForSelectedElement() {
+      const hint = document.getElementById('noElementSelectedHint');
+      const box = document.getElementById('elementControlsBox');
+      const textRow = document.getElementById('elemTextRow');
+      const sizeRow = document.getElementById('elemSizeRow');
+      const colorRow = document.getElementById('elemColorRow');
+      const actionBtns = document.getElementById('customElemActionBtns');
+
+      if (!selectedElementId) {
+        hint.style.display = 'block';
+        box.style.display = 'none';
+        return;
+      }
+
+      const elements = getCurrentMonthElements();
+      const customObj = elements.find(x => x.id === selectedElementId);
+
+      if (customObj) {
+        hint.style.display = 'none';
+        box.style.display = 'flex';
+        actionBtns.style.display = 'flex';
+
+        const isText = customObj.type === 'text';
+        textRow.style.display = isText ? 'flex' : 'none';
+        sizeRow.style.display = isText ? 'flex' : 'none';
+        colorRow.style.display = isText ? 'flex' : 'none';
+
+        if (isText) {
+          document.getElementById('selectedElemTextInput').value = customObj.text || '';
+          document.getElementById('selectedElemSizeInput').value = customObj.fontSize || 22;
+          document.getElementById('selectedElemColorInput').value = customObj.color || '#33302E';
+        }
+        document.getElementById('selectedElemOpacityInput').value = customObj.opacity ?? 1;
+        document.getElementById('selectedElemRotateInput').value = customObj.rotate || 0;
+      } else if (selectedElementId === 'itemYear' || selectedElementId === 'itemMonthTitle') {
+        hint.style.display = 'none';
+        box.style.display = 'flex';
+        actionBtns.style.display = 'none';
+        textRow.style.display = 'flex';
+        sizeRow.style.display = 'flex';
+        colorRow.style.display = 'flex';
+
+        const wrapperEl = document.getElementById(selectedElementId);
+        const targetBox = selectedElementId === 'itemYear' ? document.getElementById('yearTextBox') : document.getElementById('monthTextBox');
+        document.getElementById('selectedElemTextInput').value = targetBox.innerText;
+        document.getElementById('selectedElemSizeInput').value = parseInt(targetBox.style.fontSize) || 30;
+        document.getElementById('selectedElemOpacityInput').value = parseFloat(wrapperEl.style.opacity || '1');
+      } else {
+        hint.style.display = 'block';
+        box.style.display = 'none';
+      }
+    }
+
+    function deselectAllIfClickedBg(e) {
+      if (e.target.id === 'canvasViewport' || e.target.id === 'calendarPaper' || e.target.id === 'canvasScaleWrapper') {
+        selectedElementId = null;
+        document.querySelectorAll('.canvas-item').forEach(el => el.classList.remove('selected'));
+        renderCurrentMonthElementsList();
+        updateInspectorForSelectedElement();
+      }
+    }
+
+    function updateSelectedElementStyle(prop, val) {
+      if (!selectedElementId) return;
+      const elements = getCurrentMonthElements();
+      const customObj = elements.find(x => x.id === selectedElementId);
+
+      if (customObj) {
+        if (prop === 'text') customObj.text = val;
+        if (prop === 'fontSize') customObj.fontSize = parseFloat(val);
+        if (prop === 'color') customObj.color = val;
+        if (prop === 'opacity') customObj.opacity = parseFloat(val);
+        if (prop === 'rotate') customObj.rotate = parseFloat(val);
+        renderCustomElementsLayer();
+      } else if (selectedElementId === 'itemYear' || selectedElementId === 'itemMonthTitle') {
+        const wrapperEl = document.getElementById(selectedElementId);
+        const targetBox = selectedElementId === 'itemYear' ? document.getElementById('yearTextBox') : document.getElementById('monthTextBox');
+        if (prop === 'text') targetBox.innerText = val;
+        if (prop === 'fontSize') targetBox.style.fontSize = val + 'px';
+        if (prop === 'color') targetBox.style.color = val;
+        if (prop === 'opacity') wrapperEl.style.opacity = val;
+      }
+      saveStateToIndexedDB();
+    }
+
+    function duplicateCustomElementById(id) {
+      const elements = getCurrentMonthElements();
+      const orig = elements.find(x => x.id === id);
+      if (!orig) return;
+      const copyId = 'custom_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
+      const cloned = JSON.parse(JSON.stringify(orig));
+      cloned.id = copyId;
+      cloned.left = (orig.left || 100) + 20;
+      cloned.top = (orig.top || 100) + 20;
+      elements.push(cloned);
+      renderCustomElementsLayer();
+      selectCanvasElement(copyId);
+      saveStateToIndexedDB();
+    }
+
+    function duplicateSelectedCustomElement() {
+      if (selectedElementId) duplicateCustomElementById(selectedElementId);
+    }
+
+    function deleteCustomElementById(id) {
+      const mData = appState.monthsData[appState.currentMonth];
+      mData.elements = mData.elements.filter(x => x.id !== id);
+      if (selectedElementId === id) selectedElementId = null;
+      renderCustomElementsLayer();
+      updateInspectorForSelectedElement();
+      saveStateToIndexedDB();
+    }
+
+    function deleteSelectedCustomElement() {
+      if (selectedElementId) deleteCustomElementById(selectedElementId);
+    }
+
+    // 鍵盤 Delete / Backspace 快捷鍵監聽 (防呆：唔影響打字狀態)
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== 'Delete' && e.key !== 'Backspace') return;
+      if (!selectedElementId) return;
+
+      // 若用家正喺輸入框或者直接喺畫布文字入面打字編輯緊，唔觸發刪除成個元素
+      const activeEl = document.activeElement;
+      if (activeEl) {
+        const tag = activeEl.tagName;
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || activeEl.isContentEditable) {
+          return;
+        }
+      }
+
+      const elements = getCurrentMonthElements();
+      const isCustom = elements.some(x => x.id === selectedElementId);
+      if (isCustom) {
+        e.preventDefault();
+        deleteCustomElementById(selectedElementId);
+      }
+    });
+
+    // 統一 Pointer 拖拉與縮放事件 (支援磁吸網格對齊 Snap Grid + 中軸線)
+    let dragContext = null;
+
+    document.addEventListener('pointerdown', (e) => {
+      const resizeTargetId = e.target.dataset?.resize;
+      const itemEl = e.target.closest('.canvas-item');
+      if (!itemEl) return;
+
+      selectCanvasElement(itemEl.id);
+
+      // 若點擊嘅係未上傳相片嘅虛線佔位框，直接交俾 click 事件觸發上傳，唔啟動拖拉
+      if (e.target.closest('#photoPlaceholderBox') && !resizeTargetId) {
+        return;
+      }
+
+      if (document.activeElement === e.target && e.target.isContentEditable && !resizeTargetId) {
+        return;
+      }
+
+      // 當用家喺右側或畫布點選其他區域時，解除文字編輯焦點以便隨時可用鍵盤 Delete 掣
+      if (!e.target.isContentEditable && document.activeElement && document.activeElement.isContentEditable) {
+        document.activeElement.blur();
+      }
+
+      const zoom = parseFloat(document.getElementById('zoomRange').value) || 1;
+      dragContext = {
+        mode: resizeTargetId ? 'resize' : 'move',
+        el: itemEl,
+        id: itemEl.id,
+        startX: e.clientX,
+        startY: e.clientY,
+        origLeft: parseFloat(itemEl.style.left) || 0,
+        origTop: parseFloat(itemEl.style.top) || 0,
+        origW: parseFloat(itemEl.style.width) || itemEl.offsetWidth,
+        origH: parseFloat(itemEl.style.height) || itemEl.offsetHeight,
+        zoom
+      };
+    });
+
+    document.addEventListener('pointermove', (e) => {
+      if (!dragContext) return;
+      const dx = (e.clientX - dragContext.startX) / dragContext.zoom;
+      const dy = (e.clientY - dragContext.startY) / dragContext.zoom;
+
+      const guideV = document.getElementById('alignGuideV');
+      const guideH = document.getElementById('alignGuideH');
+      const snapStep = appState.snapGridEnabled ? (appState.snapGridSize || 20) : 1;
+
+      if (dragContext.mode === 'move') {
+        let newLeft = Math.round(dragContext.origLeft + dx);
+        let newTop = Math.round(dragContext.origTop + dy);
+
+        if (appState.snapGridEnabled) {
+          newLeft = Math.round(newLeft / snapStep) * snapStep;
+          newTop = Math.round(newTop / snapStep) * snapStep;
+        }
+
+        // 中軸磁吸輔助線
+        const itemCenterX = newLeft + dragContext.origW / 2;
+        const paperCenterX = appState.paperWidthPx / 2;
+        if (Math.abs(itemCenterX - paperCenterX) < 6) {
+          newLeft = Math.round(paperCenterX - dragContext.origW / 2);
+          guideV.style.display = 'block';
+        } else {
+          guideV.style.display = 'none';
+        }
+
+        const itemCenterY = newTop + dragContext.origH / 2;
+        const paperCenterY = appState.paperHeightPx / 2;
+        if (Math.abs(itemCenterY - paperCenterY) < 6) {
+          newTop = Math.round(paperCenterY - dragContext.origH / 2);
+          guideH.style.display = 'block';
+        } else {
+          guideH.style.display = 'none';
+        }
+
+        dragContext.el.style.left = newLeft + 'px';
+        dragContext.el.style.top = newTop + 'px';
+
+        const customObj = getCurrentMonthElements().find(x => x.id === dragContext.id);
+        if (customObj) {
+          customObj.left = newLeft;
+          customObj.top = newTop;
+        }
+      } else if (dragContext.mode === 'resize') {
+        let newW = Math.max(40, Math.round(dragContext.origW + dx));
+        let newH = Math.max(30, Math.round(dragContext.origH + dy));
+
+        if (appState.snapGridEnabled) {
+          newW = Math.max(40, Math.round(newW / snapStep) * snapStep);
+          newH = Math.max(30, Math.round(newH / snapStep) * snapStep);
+        }
+
+        dragContext.el.style.width = newW + 'px';
+        dragContext.el.style.height = newH + 'px';
+
+        const customObj = getCurrentMonthElements().find(x => x.id === dragContext.id);
+        if (customObj) {
+          customObj.width = newW;
+          customObj.height = newH;
+        }
+      }
+    });
+
+    document.addEventListener('pointerup', () => {
+      if (dragContext) {
+        document.getElementById('alignGuideV').style.display = 'none';
+        document.getElementById('alignGuideH').style.display = 'none';
+        dragContext = null;
+        saveStateToIndexedDB();
+      }
+    });
+
+    /********************************************************************
+     * 10. 寵物專屬紀念日管理
+     ********************************************************************/
+    function addCustomPetEvent() {
+      const m = parseInt(document.getElementById('petEventMonthSelect').value);
+      const d = parseInt(document.getElementById('petEventDayInput').value);
+      const title = document.getElementById('petEventNameInput').value.trim();
+      if (!title || isNaN(d) || d < 1 || d > 31) {
+        alert('請輸入有效嘅日子同紀念日名稱（例如：🎂 胡椒生日）');
+        return;
+      }
+      appState.petEvents.push({ month: m, day: d, title });
+      document.getElementById('petEventNameInput').value = '';
+      renderPetEventsList();
+      if (appState.currentMonth === m) renderCalendarGrid();
+      saveStateToIndexedDB();
+    }
+
+    function removePetEvent(idx) {
+      appState.petEvents.splice(idx, 1);
+      renderPetEventsList();
+      renderCalendarGrid();
+      saveStateToIndexedDB();
+    }
+
+    function renderPetEventsList() {
+      const list = document.getElementById('petEventsList');
+      list.innerHTML = '';
+      appState.petEvents.forEach((ev, idx) => {
+        const row = document.createElement('div');
+        row.style.display = 'flex';
+        row.style.justifyContent = 'space-between';
+        row.style.alignItems = 'center';
+        row.style.background = 'rgba(255,255,255,0.75)';
+        row.style.padding = '5px 8px';
+        row.style.borderRadius = '8px';
+        row.innerHTML = `
+          <span><strong>${ev.month}月${ev.day}日</strong>：${ev.title}</span>
+          <button class="btn" style="padding:2px 6px; font-size:10px;" onclick="removePetEvent(${idx})">✕</button>
+        `;
+        list.appendChild(row);
+      });
+    }
+
+    /********************************************************************
+     * 11. 300 DPI 無損 PNG / JPG / 矢量 PDF 導出引擎
+     ********************************************************************/
+    function openExportModal() {
+      document.getElementById('mobileImagePreviewArea').style.display = 'none';
+      document.getElementById('exportModal').classList.add('open');
+    }
+
+    function closeExportModal() {
+      document.getElementById('exportModal').classList.remove('open');
+    }
+
+    async function exportHighResImage(format = 'png') {
+      const btnId = format === 'png' ? 'btnExportPNG' : 'btnExportJPG';
+      const btn = document.getElementById(btnId);
+      const originalText = btn.innerText;
+      btn.innerText = '⏳ 正在渲染 300 DPI 無損大圖...';
+      btn.disabled = true;
+
+      const paper = document.getElementById('calendarPaper');
+      const scaleWrapper = document.getElementById('canvasScaleWrapper');
+      const prevTransform = scaleWrapper.style.transform;
+
+      try {
+        paper.classList.add('export-clean-mode');
+        scaleWrapper.style.transform = 'none';
+
+        const sizeScaleCompensation = appState.sizeCode === 'A3' ? (1 / 0.72) : (appState.sizeCode === 'A4' ? (1 / 0.85) : 1);
+        const exact300DpiRatio = 3.125 * sizeScaleCompensation;
+
+        const exportOptions = {
+          pixelRatio: exact300DpiRatio,
+          quality: 1.0,
+          backgroundColor: appState.colors.paperBg,
+          cacheBust: true,
+          style: {
+            transform: 'none',
+            boxShadow: 'none'
+          }
+        };
+
+        let dataUrl;
+        if (format === 'png') {
+          dataUrl = await htmlToImage.toPng(paper, exportOptions);
+        } else {
+          dataUrl = await htmlToImage.toJpeg(paper, exportOptions);
+        }
+
+        const ext = format === 'png' ? 'png' : 'jpg';
+        const fileName = `2027_Pet_Calendar_${appState.sizeCode}_${appState.orientation}_Month${appState.currentMonth}_300DPI.${ext}`;
+
+        const link = document.createElement('a');
+        link.download = fileName;
+        link.href = dataUrl;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        const previewArea = document.getElementById('mobileImagePreviewArea');
+        const previewImg = document.getElementById('generatedHighResPreview');
+        const outW = Math.round(appState.paperWidthPx * exact300DpiRatio);
+        const outH = Math.round(appState.paperHeightPx * exact300DpiRatio);
+        document.getElementById('mobilePreviewTitle').textContent =
+          `✅ 300 DPI 無損 ${ext.toUpperCase()} 已生成！（精準尺寸：${outW} × ${outH} px）`;
+        previewImg.src = dataUrl;
+        previewArea.style.display = 'flex';
+      } catch (err) {
+        console.error('匯出圖片失敗:', err);
+        alert('匯出圖片時遇到問題，請確認相片已正確載入後再試一次！');
+      } finally {
+        scaleWrapper.style.transform = prevTransform;
+        paper.classList.remove('export-clean-mode');
+        btn.innerText = originalText;
+        btn.disabled = false;
+      }
+    }
+
+    function exportVectorPDF() {
+      closeExportModal();
+      setTimeout(() => {
+        window.print();
+      }, 250);
+    }
+
+    /********************************************************************
+     * 12. 面板分頁切換與初始化啟動
+     ********************************************************************/
+    function switchInspectorTab(tabId, btnEl) {
+      document.querySelectorAll('.panel-tab').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+      btnEl.classList.add('active');
+      document.getElementById(tabId).classList.add('active');
+    }
+
+    window.addEventListener('DOMContentLoaded', async () => {
+      renderStickerAssetLibrary();
+      renderMonthBar();
+      switchMonth(1, false);
+      renderPetEventsList();
+      autoFitCanvasInViewport();
+
+      await initIndexedDB();
+      const savedSnapshot = await loadStateFromIndexedDB();
+      if (savedSnapshot) {
+        await applyProjectSnapshot(savedSnapshot);
+      }
+    });
+
+    window.addEventListener('resize', () => {
+      autoFitCanvasInViewport();
+    });
+  </script>
+</body>
+</html>
